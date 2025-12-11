@@ -9,3 +9,7 @@ The project contains all the software present on the Nucleo board, together with
 
 ## The documentation is available in details here:
 [Documentation](https://bosch-future-mobility-challenge-documentation.readthedocs-hosted.com/data/embeddedplatform.html) 
+
+Lưu ý: Repo embed này đã được custom để thêm vào 1 state mới trong robotstatemachine (state 5) để nhập lệnh vào pwm và điều khiển trực tiếp bằng dữ liệu pwm thay vì speed
+
+- Add thêm phần điều khiển pwm để steer cho servo.
