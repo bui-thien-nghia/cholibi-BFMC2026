@@ -30,6 +30,10 @@
 
 #include <drivers/speedingmotor.hpp>
 
+#define calibrated 1
+#define calib_sup_limit 500
+#define calib_inf_limit -500
+
 namespace drivers{
     /**
      * @brief It initializes the pwm parameters and it sets the speed reference to zero position, and the limits of the car speed.
@@ -42,11 +46,13 @@ namespace drivers{
     CSpeedingMotor::CSpeedingMotor(
             PinName f_pwm_pin, 
             int f_inf_limit, 
-            int f_sup_limit
+            int f_sup_limit,
+            UnbufferedSerial& f_serial
         )
         : m_pwm_pin(f_pwm_pin)
         , m_inf_limit(f_inf_limit)
         , m_sup_limit(f_sup_limit)
+        , m_serial(f_serial)
     {
         // Set the ms_period on the pwm_pin
         m_pwm_pin.period_ms(ms_period); 
@@ -62,21 +68,80 @@ namespace drivers{
 
     /** @brief  It modifies the speed reference of the brushless motor, which controls the speed of the wheels. 
      *
-     *  @param f_speed      speed in m/s, where the positive value means forward direction and negative value the backward direction. 
+     *  @param f_speed      speed in mm/s, where the positive value means forward direction and negative value the backward direction. 
      */
     void CSpeedingMotor::setSpeed(int f_speed)
     {
-        // char buffer[100];
-        // snprintf(buffer, sizeof(buffer), "Initial value, Step Value: %d\r\n", step_value);
-        // m_serial.write(buffer, strlen(buffer));
+        pwm_value = zero_default;
 
-        step_value = interpolate(-f_speed, speedValuesP, speedValuesN, stepValues, 25);
-
-        // snprintf(buffer, sizeof(buffer), "Speed requested: %d mm/s, Step Value: %d\n", f_speed, step_value);
-        // m_serial.write(buffer, strlen(buffer));
-
-        m_pwm_pin.pulsewidth_us(conversion(f_speed));
+        if (f_speed != 0) {
+            if (calibrated == 1)
+            {
+                pwm_value = computePWMPolynomial(f_speed);
+            }
+            else {
+                pwm_value = interpolate(-f_speed, speedValuesP, speedValuesN, pwmValuesP, pwmValuesN, 25);
+            }
+        }
+        
+        m_pwm_pin.pulsewidth_us(pwm_value);
     };
+
+    /** @brief  It converts speed reference to duty cycle for pwm signal. 
+     * 
+     *  @param f_speed    speed
+     *  \return        new `pwm_value`
+    */
+    int CSpeedingMotor::computePWMPolynomial(int speed)
+    {
+        int64_t y=zero_default;
+        // POLYNOMIAL CODE START
+
+        // Cubic spline evaluation with 10 segments
+        static const int64_t knots[11] = {-565, -417, -365, -194, -102, 0, 135, 234, 421, 492, 682};
+        static const int64_t coeffs[10][4] = { 
+            {0LL, 0LL, -117359LL, 1741684736LL},
+            {0LL, -210LL, -148388LL, 1722810368LL},
+            {3LL, -288LL, -174369LL, 1714421760LL},
+            {-30LL, 1046LL, -45199LL, 1689255936LL},
+            {31LL, -7298LL, -620873LL, 1670381568LL},
+            {3LL, 2228LL, -1140572LL, 1563426816LL},
+            {-12LL, 3286LL, -396163LL, 1456472064LL},
+            {1LL, -344LL, -104596LL, 1437597696LL},
+            {-1LL, 209LL, -129854LL, 1412431872LL},
+            {0LL, 79LL, -109423LL, 1404043264LL}
+        };
+        
+        // Find the correct segment
+        int segment = -1;
+        for (int i = 0; i < 10; i++) {
+            if (speed >= knots[i] && speed <= knots[i + 1]) {
+                segment = i;
+                break;
+            }
+        }
+        
+        // Clamp to boundary segments if out of range
+        if (segment == -1) {
+            if (speed < knots[0]) segment = 0;
+            else segment = 10 - 1;
+        }
+        
+        // Evaluate cubic polynomial for this segment: a*(x-xi)^3 + b*(x-xi)^2 + c*(x-xi) + d
+        int64_t dx = speed - knots[segment];
+        int64_t dx2 = dx * dx;
+        int64_t dx3 = dx2 * dx;
+        
+        y = (coeffs[segment][0] * dx3 + coeffs[segment][1] * dx2 + 
+             coeffs[segment][2] * dx + coeffs[segment][3]) / 1048576LL;
+        
+        /* Cubic spline interpolation with 10 segments
+         * Each segment is defined by: a*(x-xi)^3 + b*(x-xi)^2 + c*(x-xi) + d
+         * Coefficients are scaled by 1048576 for integer arithmetic
+         */
+        // POLYNOMIAL CODE END
+        return (int)y;
+    }
 
     /** @brief  It puts the brushless motor into brake state, 
      */
@@ -88,109 +153,91 @@ namespace drivers{
     /**
     * @brief Interpolates values based on speed input.
     *
-    * This function interpolates `stepValues` based on the provided `speed` input.
-    * The interpolation is made using `steeringValueP` and `steeringValueN` as reference values.
+    * This function interpolates `pwmValues` based on the provided `speed` input.
+    * The interpolation is made using `speedValuesP` and `speedValuesN` as reference values.
     *
     * @param speed The input speed value for which the values need to be interpolated.
     * @param speedValuesP Positive reference values for speed.
     * @param speedValuesN Negative reference values for speed.
-    * @param stepValues Step values corresponding to speedValueP and speedValueN which need to be interpolated.
+    * @param pwmValuesP PWM values corresponding to speedValueP
+    * @param pwmValuesN PWM values corresponding to speedValueN
     * @param size The size of the arrays.
-    * @return The new value for the step value
+    * @return The new value for `pwm_value`
     */
-    // int16_t CSpeedingMotor::interpolate(int speed, const int speedValuesP[], const int speedValuesN[], const int stepValues[], int size)
-    // {
-    //     if(speed <= speedValuesP[0]){
-    //         if (speed >= speedValuesN[0])
-    //         {
-    //             return stepValues[0];
-    //         }
-    //         else{
-    //             for(uint8_t i=1; i<size; i++)
-    //             {
-    //                 if (speed >= speedValuesN[i])
-    //                 {
-    //                     int slope = (stepValues[i] - stepValues[i-1]) / (speedValuesN[i] - speedValuesN[i-1]);
-    //                     return stepValues[i-1] + slope * (speed - speedValuesN[i-1]);
-    //                 }
-    //             }
-    //         }
-            
-    //     } 
-    //     if(speed >= speedValuesP[size-1]) return stepValues[size-1];
-    //     if(speed <= speedValuesN[size-1]) return stepValues[size-1];
-
-    //     for(uint8_t i=1; i<size; i++)
-    //     {
-    //         if (speed <= speedValuesP[i])
-    //         {
-    //             int slope = (stepValues[i] - stepValues[i-1]) / (speedValuesP[i] - speedValuesP[i-1]);
-    //             return stepValues[i-1] + slope * (speed - speedValuesP[i-1]);
-    //         }
-    //     }
-
-    //     return -1;
-    // }
-    int16_t CSpeedingMotor::interpolate(int speed, const int speedValuesP[], const int speedValuesN[], const int stepValues[], int size)
+    int16_t CSpeedingMotor::interpolate(int speed, const int speedValuesP[], const int speedValuesN[], const int pwmValuesP[], const int pwmValuesN[], int size)
     {
-        const int SCALE = 1000; // Factor de scalare pentru precizie
-        // Pentru valorile negative
+        const int SCALE = 1000; // Precision factor for fixed-point arithmetic
+
+        if(speed == 0) return zero_default;
+        if(speed >= speedValuesP[size-1]) return pwmValuesP[size-1];
+        if(speed <= speedValuesN[size-1]) return pwmValuesN[size-1];
+
+        // For negative speed values
         if(speed <= speedValuesP[0]){
+            if(speed > 0) return pwmValuesP[0];
             if (speed >= speedValuesN[0])
             {
-                return stepValues[0];
+                return pwmValuesN[0];
             }
             else {
                 for(uint8_t i = 1; i < size; i++)
                 {
                     if (speed >= speedValuesN[i])
                     {
-                        int deltaStep = (stepValues[i] - stepValues[i-1]) * SCALE;
+                        int deltaPWM = (pwmValuesN[i] - pwmValuesN[i-1]) * SCALE;
                         int deltaSpeed = speedValuesN[i] - speedValuesN[i-1];
-                        int slope = deltaStep / deltaSpeed; // Calculăm panta în format fixed-point
-                        int interpFixed = stepValues[i-1] * SCALE + slope * (speed - speedValuesN[i-1]);
+                        int slope = deltaPWM / deltaSpeed; // Compute slope in fixed-point
+                        int interpFixed = pwmValuesN[i-1] * SCALE + slope * (speed - speedValuesN[i-1]);
                         return (int16_t)(interpFixed / SCALE);
                     }
                 }
             }
         }
-        if(speed >= speedValuesP[size-1]) return stepValues[size-1];
-        if(speed <= speedValuesN[size-1]) return stepValues[size-1];
 
-        // Pentru valorile pozitive
+        // For positive speed values
         for(uint8_t i = 1; i < size; i++)
         {
             if (speed <= speedValuesP[i])
             {
-                int deltaStep = (stepValues[i] - stepValues[i-1]) * SCALE;
+                int deltaPWM = (pwmValuesP[i] - pwmValuesP[i-1]) * SCALE;
                 int deltaSpeed = speedValuesP[i] - speedValuesP[i-1];
-                int slope = deltaStep / deltaSpeed; // Panta în fixed-point
-                int interpFixed = stepValues[i-1] * SCALE + slope * (speed - speedValuesP[i-1]);
+                int slope = deltaPWM / deltaSpeed; // Compute slope in fixed-point
+                int interpFixed = pwmValuesP[i-1] * SCALE + slope * (speed - speedValuesP[i-1]);
                 return (int16_t)(interpFixed / SCALE);
             }
         }
-        return -1;
+        
+        return zero_default;
     }
 
-
-    /** @brief  It converts speed reference to duty cycle for pwm signal. 
-     * 
-     *  @param f_speed    speed
-     *  \return         pwm value
-     */
-    int CSpeedingMotor::conversion(int f_speed)
-    {   
-        return ((step_value * f_speed)/100 + zero_default);
-    };
-
     /**
-     * @brief It verifies whether a number is in the given treshold
+     * @brief It verifies whether a number is in a given range
      * 
      * @param f_speed value 
-     * @return true means, that the value is in the range
-     * @return false means, that the value isn't in the range
-     */
-    bool CSpeedingMotor::inRange(int f_speed){
-        return (m_inf_limit<=f_speed) && (f_speed<=m_sup_limit);
+     * @return inf_limit, if the value is lower than the range's low
+     * @return sup_limit, if the value is higher than the range's high
+    */
+    int CSpeedingMotor::inRange(int f_speed){
+
+        if(calibrated == 1){
+            if(f_speed < calib_inf_limit) return calib_inf_limit;
+            if(f_speed > calib_sup_limit) return calib_sup_limit;
+            return f_speed;
+        } else{
+            if(f_speed < m_inf_limit) return m_inf_limit;
+            if(f_speed > m_sup_limit) return m_sup_limit;
+            return f_speed;
+        }
+
     };
+
+    int CSpeedingMotor::get_upper_limit()
+    {
+        return m_sup_limit;
+    }
+
+    int CSpeedingMotor::get_lower_limit()
+    {
+        return m_inf_limit;
+    }
 }; // namespace hardware::drivers
