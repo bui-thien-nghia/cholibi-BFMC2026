@@ -202,9 +202,10 @@ def display_points(img, boundary_points):
     img = cv2.imread(img)
     for point in boundary_points:
         cv2.circle(img, point, 2, (0, 255, 0), -1)
-    cv2.imshow('temp', img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    plt.imshow(img)
+    plt.axis('off')
+    plt.title('Boundary points found')
 
 
 def display_clusters(points, labels, cmap='rainbow', dim=([],[])):
@@ -257,6 +258,13 @@ def display_polynomials(list_polynomials, cmap='rainbow', dim=()):
     plt.ylabel('y-camera')
     plt.title(f'Lane detection result')
     if len(dim) == 2:
-        plt.xlim(0, dim[0])
-        plt.ylim(-dim[1], 0)
+        if len(dim[0]) == 2:
+            plt.xlim(dim[0][0], dim[0][1])
+        elif len(dim[0]) == 1:
+            plt.xlim(0, dim[0][0])
+
+        if len(dim[1]) == 2:
+            plt.ylim(dim[1][0], dim[1][1])
+        elif len(dim[1]) == 1:
+            plt.ylim(0, dim[1][0])
     plt.legend()
