@@ -29,6 +29,8 @@
 */
 
 #include "brain/klmanager.hpp"
+#include <thread>
+#include <chrono>
 
 #define _25_chars 25
 
@@ -82,14 +84,14 @@ namespace brain
                 {
                     sprintf(b,"%d",l_keyValue);
                     m_imu.serialCallbackIMUcommand("0", response);
-                    ThisThread::sleep_for(chrono::milliseconds(50));
+                    std::this_thread::sleep_for(chrono::milliseconds(50));
                     m_instant.serialCallbackINSTANTcommand("0", response);
-                    ThisThread::sleep_for(chrono::milliseconds(50));
+                    std::this_thread::sleep_for(chrono::milliseconds(50));
                     m_baterry.serialCallbackTOTALVcommand("0", response);
-                    ThisThread::sleep_for(chrono::milliseconds(50));
+                    std::this_thread::sleep_for(chrono::milliseconds(50));
                     // m_robotStateMachine.serialCallbackVCDcommand("0;0;2", response);
                     m_robotStateMachine.serialCallbackBRAKEcommand("0", response);
-                    ThisThread::sleep_for(chrono::milliseconds(50));
+                    std::this_thread::sleep_for(chrono::milliseconds(50));
                     m_resourceM.serialCallbackRESMONCommand("0", response);
                     uint8_globalsV_value_of_kl = 0;
                     m_alerts.alertsCommand("3", response);
@@ -103,6 +105,7 @@ namespace brain
                     if(!bool_globalsV_instant_isActive) m_instant.serialCallbackINSTANTcommand("1", response);
                     if(!bool_globalsV_battery_isActive) m_baterry.serialCallbackTOTALVcommand("1", response);
                     if(!bool_globalsV_resource_isActive) m_resourceM.serialCallbackRESMONCommand("1", response);
+                    m_robotStateMachine.serialCallbackBRAKEcommand("0", response);
                     m_alerts.alertsCommand("4", response);
                 }
                 if(l_keyValue == 30 && (uint8_globalsV_value_of_kl != 30)){
