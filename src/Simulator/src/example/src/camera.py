@@ -42,9 +42,9 @@ class CameraHandler():
         Creates a bridge for converting the image from Gazebo image intro OpenCv image
         """
         self.bridge = CvBridge()
-        self.cv_image = np.zeros((640, 480))
+        self.cv_image = np.zeros((2048, 1080))
         rospy.init_node('CAMnod', anonymous=True)
-        self.image_sub = rospy.Subscriber("/automobile/image_raw", Image, self.callback)
+        self.image_sub = rospy.Subscriber("/automobile/image_lane", Image, self.callback)
         rospy.spin()
 
     def callback(self, data):
@@ -56,7 +56,7 @@ class CameraHandler():
         cv2.imshow("Frame preview", self.cv_image)
         key = cv2.waitKey(1)
     
-            
+
 if __name__ == '__main__':
     try:
         nod = CameraHandler()

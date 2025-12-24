@@ -6,12 +6,12 @@ from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 
 def find_plateaus(img,
-                  ascent_threshold=30,
-                  winning_percentage=0.5,
+                  ascent_threshold=50,
+                  winning_percentage=0.4,
                   ascent_to_plateau=20,
-                  min_pixels_to_plateau=5,
-                  lower_pixel_limit=6,
-                  upper_pixel_limit=200,
+                  min_pixels_to_plateau=3,
+                  lower_pixel_limit=5,
+                  upper_pixel_limit=100,
                   confidence_interval=0.08):
     '''
     # Status:
@@ -23,7 +23,9 @@ def find_plateaus(img,
     5. Did not pass noise test
     6. PassedDocstring for find_plateaus
     '''
-    img = cv2.imread(img)
+    if type(img) == str:
+        img = cv2.imread(img)
+
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     _, w = gray.shape
     boundary_points = []
@@ -101,7 +103,7 @@ def deproject_points(points, h, theta, f, k, u0, v0, eps=1e-8):
         # scale = h / (cos_theta * norm_v - sin_theta + eps)
         # world_points.append((norm_u * scale, norm_v * scale))
         scale = h / (sin_theta * norm_v - cos_theta + eps)
-        world_points.append((norm_u * scale, (cos_theta * norm_v + sin_theta) * scale))
+        world_points.append((float(norm_u * scale), float(cos_theta * norm_v + sin_theta) * scale))
     
     return world_points
 
@@ -130,6 +132,12 @@ def dbscan_cluster(points, eps=0.5, min_samples=2, standardise=True):
 
 
 def find_lane_points(points, labels):
+    """
+    Returns respectively the left and right lane.
+    """
+    if labels == [-1] or len(labels) == 0:
+        return {}
+    
     points_with_labels = {}
     for point, label in zip(points, labels):
         if label == -1:
@@ -142,22 +150,28 @@ def find_lane_points(points, labels):
 
     max_len = 0
     second_max_len = 0
-    first_lane_label = '0'
-    second_lane_label = '0'
+    left_lane_label = '0'
+    right_lane_label = '0'
     for i in range(len(points_with_labels)):
         i = str(i)
         points_cnt = len(points_with_labels[i])
         if points_cnt >= max_len:
             if points_cnt != max_len:
                 second_max_len = max_len
-                second_lane_label = first_lane_label
+                right_lane_label = left_lane_label
             max_len = points_cnt
-            first_lane_label = i
+            left_lane_label = i
         elif len(points_with_labels[i]) > second_max_len:
             second_max_len = points_cnt
-            second_lane_label = i
+            right_lane_label = i
 
-    return points_with_labels[first_lane_label], points_with_labels[second_lane_label]
+    left_mean_x = float(np.mean(np.array(points_with_labels[left_lane_label])[:, 0]))
+    right_mean_x = float(np.mean(np.array(points_with_labels[right_lane_label])[:, 0]))
+
+    if left_mean_x >= right_mean_x:
+        left_lane_label, right_lane_label = right_lane_label, left_lane_label
+
+    return points_with_labels[left_lane_label], points_with_labels[right_lane_label]
 
 
 
@@ -175,21 +189,21 @@ def fit_polynomial(points, degree=2, threshold=10):
         return None
 
 
-def suggest_path(left_lane, right_lane):
-    left_lane = np.array(left_lane)
-    right_lane = np.array(right_lane)
-    left_lane = left_lane[left_lane[:, 1].argsort()]
-    right_lane = right_lane[right_lane[:, 1].argsort()]
+def suggest_path(left_lane_points, right_lane_points, diff_y=10): 
+    left_lane_points = np.array(left_lane_points)
+    right_lane_points = np.array(right_lane_points)
+    left_lane_points = left_lane_points[left_lane_points[:, 1].argsort()]
+    right_lane_points = right_lane_points[right_lane_points[:, 1].argsort()]
 
-    min_y_left = np.min(left_lane[:, 1])
-    max_y_left = np.max(left_lane[:, 1])
-    min_y_right = np.min(right_lane[:, 1])
-    max_y_right = np.max(right_lane[:, 1])
+    min_y_left = np.min(left_lane_points[:, 1])
+    max_y_left = np.max(left_lane_points[:, 1])
+    min_y_right = np.min(right_lane_points[:, 1])
+    max_y_right = np.max(right_lane_points[:, 1])
 
     suggested_points = []
-    for y in range(min(min_y_left, min_y_right), max(max_y_left, max_y_right)):
-        buffer_left = left_lane[left_lane[:, 1] == y]
-        buffer_right = right_lane[right_lane[:, 1] == y]
+    for y in np.arange(min(min_y_left, min_y_right), max(max_y_left, max_y_right)):
+        buffer_left = left_lane_points[(left_lane_points[:, 1] >= y - diff_y) & (left_lane_points[:, 1] <= y + diff_y)]
+        buffer_right = right_lane_points[(right_lane_points[:, 1] >= y - diff_y) & (right_lane_points[:, 1] <= y + diff_y)]
         if not len(buffer_left) or not len(buffer_right):
             continue
 
@@ -198,13 +212,13 @@ def suggest_path(left_lane, right_lane):
 
     return fit_polynomial(suggested_points)
 
+
 def display_points(img, boundary_points):
     img = cv2.imread(img)
     for point in boundary_points:
         cv2.circle(img, point, 2, (0, 255, 0), -1)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     plt.imshow(img)
-    plt.axis('off')
     plt.title('Boundary points found')
 
 
@@ -251,6 +265,7 @@ def display_polynomials(list_polynomials, cmap='rainbow', dim=()):
     x = np.linspace(-100, 1000, 1000)
     colors = plt.colormaps[cmap](np.linspace(0, 1, len(list_polynomials)))
     for i, poly in enumerate(list_polynomials):
+        if poly == None: continue
         y = poly(x)
         plt.plot(x, -y, label=f'Line {i}', color=tuple(colors[i].tolist()))
     
@@ -268,3 +283,37 @@ def display_polynomials(list_polynomials, cmap='rainbow', dim=()):
         elif len(dim[1]) == 1:
             plt.ylim(0, dim[1][0])
     plt.legend()
+
+
+def run_lane_detect(img, h, theta, f, k, eps=1e-8, use_deprojected=False):
+    if type(img) == str:
+        img = cv2.imread(img)
+
+    height, width, _ = img.shape
+    points, _ = find_plateaus(img)
+    deprojected = deproject_points(points, h, theta, f, k, width / 2, height / 2, eps=eps)
+    labels = dbscan_cluster(deprojected, eps=0.3)
+    if use_deprojected:
+        points = deprojected
+    first_lane, second_lane = find_lane_points(points, labels)
+    return suggest_path(first_lane, second_lane), fit_polynomial(first_lane), fit_polynomial(second_lane)
+
+
+def add_lanes_to_image(img, list_polynomials, points_per_polynomial=100):
+    if type(img) == str:
+        img = cv2.imread(img)
+
+    h, w = img.shape[:2]
+    for y in np.linspace(0, h, points_per_polynomial):
+        y = int(y)
+        for poly in list_polynomials:
+            if poly == None: continue
+            coeffs = poly.coeffs.copy()
+            coeffs[-1] -= y
+            new_poly = np.poly1d(coeffs)
+            x = new_poly.roots
+            for val in x:
+                if 0 <= val < w and not np.iscomplex(val):
+                    cv2.circle(img, (int(val), int(y)), 2, (0, 255, 0), 2)
+
+    return img

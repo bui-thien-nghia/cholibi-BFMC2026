@@ -301,4 +301,10 @@ class StateChange(Enum):
     msgID = 1
     msgType = "str"
 
+################################# From StateMachine ##################################
+class LaneDetection(Enum):
+    Queue = "General"
+    Owner = "threadLaneDetection"
+    msgID = 1
+    msgType = "dict"
 ### It will have this format: {"WarningName":"name1", "WarningID": 1}
