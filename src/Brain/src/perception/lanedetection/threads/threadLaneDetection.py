@@ -39,7 +39,7 @@ class threadLaneDetection(ThreadWithStop):
 
             path_poly, first_lane_poly, second_lane_poly = run_lane_detect(
                 img,
-                h=self.h,
+                h=self.h, # ủa cái này hình như là self.camera_height ý
                 theta=self.camera_angle,
                 f=self.focal_length,
                 k=self.m_per_px,
