@@ -4,7 +4,7 @@ import numpy as np
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 from std_msgs.msg import Float32MultiArray
-from Perception_UNDER_DEVELOPMENT.lane_detect import run_lane_detect, add_lanes_to_image
+from Perception.src.lane_detect import run_lane_detect, add_lanes_to_image
 
 class LaneDetectionNode:
     def __init__(self):

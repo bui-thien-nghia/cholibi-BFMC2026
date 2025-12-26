@@ -6,7 +6,7 @@ from src.templates.threadwithstop import ThreadWithStop
 from src.utils.messages.messageHandlerSender import messageHandlerSender
 from src.utils.messages.messageHandlerSubscriber import messageHandlerSubscriber
 from src.utils.messages.allMessages import mainCamera, laneDetectionResult
-from Perception_UNDER_DEVELOPMENT.lane_detect import (
+from Perception.src.lane_detect import (
     run_lane_detect
 )
 
