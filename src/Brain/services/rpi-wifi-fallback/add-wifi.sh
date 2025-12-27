@@ -118,7 +118,6 @@ run_nmcli connection modify "$TARGET_SSID" \
   wifi-sec.key-mgmt wpa-psk \
   wifi-sec.psk "$TARGET_PSK" \
   802-11-wireless.mode infrastructure \
-  802-11-wireless.band a \
   802-11-wireless.cloned-mac-address permanent \
   connection.autoconnect "$AUTOCONNECT" \
   connection.autoconnect-priority 20
