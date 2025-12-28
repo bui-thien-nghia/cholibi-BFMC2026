@@ -317,3 +317,35 @@ def add_lanes_to_image(img, list_polynomials, points_per_polynomial=100):
                     cv2.circle(img, (int(val), int(y)), 2, (0, 255, 0), 2)
 
     return img
+
+def main():
+    img_path = 'test_image1.jpg'
+    img = cv2.imread(img_path)
+    
+    if img is None:
+        print("Error: Image not found.")
+        return
+
+    # Camera parameters (example values, replace with actual calibration data)
+    h = 1.5  # height of camera from ground in meters
+    theta = 15  # tilt angle in degrees
+    f = 800  # focal length in pixels
+    k = 1  # scaling factor
+
+    # Run lane detection
+    suggested_path, left_lane_poly, right_lane_poly = run_lane_detect(img, h, theta, f, k, use_deprojected=False)
+
+    # Add detected lanes to image
+    img_with_lanes = add_lanes_to_image(img, [left_lane_poly, right_lane_poly, suggested_path])
+
+    # Display results
+    plt.figure(figsize=(10, 6))
+    plt.imshow(cv2.cvtColor(img_with_lanes, cv2.COLOR_BGR2RGB))
+    plt.title('Detected Lanes and Suggested Path')
+    plt.axis('off')
+    plt.show()
+
+if __name__ == "__main__":
+    main()
+
+    
