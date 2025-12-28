@@ -1,5 +1,4 @@
 {
     "python.REPL.enableREPLSmartSend": false,
-    "python-envs.defaultEnvManager": "ms-python.python:system",
-    "python-envs.pythonProjects": []
+    "cmake.sourceDirectory": "C:/Users/Bui Thien Nghia/Documents/PERSONAL FILES 2/Cholibi-BFMC2026/src/Embedded_Platform"
 }
