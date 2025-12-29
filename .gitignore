@@ -1,5 +1,7 @@
 *.pt
 *.yaml
-images
-dataset
-runs
+.vscode/
+images/
+dataset/
+runs/
+model/
