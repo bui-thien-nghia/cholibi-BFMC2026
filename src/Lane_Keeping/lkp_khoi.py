@@ -110,7 +110,7 @@ def deproject_points(points, h, theta, f, k, u0, v0, eps=1e-8):
         # scale = h / (cos_theta * norm_v - sin_theta + eps)
         # world_points.append((norm_u * scale, norm_v * scale))
         scale = h / (sin_theta * norm_v - cos_theta + eps)
-        world_points.append((float(norm_u * scale), float(cos_theta * norm_v + sin_theta) * scale))
+        world_points.append((float(norm_u * scale), float((cos_theta * norm_v + sin_theta) * scale)))
     
     return world_points
 
@@ -204,21 +204,16 @@ def fit_polynomial(points, degree=2, threshold=10):
 def suggest_path(left_lane_points, right_lane_points, diff_y=10): 
     left_lane_points = np.array(left_lane_points)
     right_lane_points = np.array(right_lane_points)
-    left_lane_points = left_lane_points[left_lane_points[:, 1].argsort()]
-    right_lane_points = right_lane_points[right_lane_points[:, 1].argsort()]
+    
 
-    # Sort bang y thay cho x
-    if len(left_lane_points) > 0:
-        left_lane_points = left_lane_points[left_lane_points[:, 1].argsort()]
-    if len(right_lane_points) > 0:
-        right_lane_points = right_lane_points[right_lane_points[:, 1].argsort()]
-    if len(right_lane_points) == 0 or len(left_lane_points) == 0:
-        return None
     
     min_y_left = np.min(left_lane_points[:, 1])
     max_y_left = np.max(left_lane_points[:, 1])
     min_y_right = np.min(right_lane_points[:, 1])
     max_y_right = np.max(right_lane_points[:, 1])
+
+    left_lane_points = left_lane_points[left_lane_points[:, 1].argsort()]
+    right_lane_points = right_lane_points[right_lane_points[:, 1].argsort()]
 
     suggested_points = []
     for y in np.arange(min(min_y_left, min_y_right), max(max_y_left, max_y_right)):
@@ -352,26 +347,31 @@ def add_lanes_to_image(img, list_polynomials, points_per_polynomial=100):
 def find_x_at_y(poly, target_y, img_width=2048):
     if poly is None:
         return None
-    coeffs = poly.coeffs.copy()
-    coeffs[-1] -= target_y
-    roots = np.poly1d(coeffs).roots
-    valid_x = []
-    for val in roots:
-        if not np.iscomplex(val):
-            x_val = val.real
-            if 0 <= x_val <= img_width:
-                valid_x.append(x_val)
-    if len(valid_x) > 0:
-        return valid_x[0]
+    try:
+        x_val = poly(target_y)
+        if 0 <= x_val < img_width:
+            return float(x_val)
+    except:
+        pass
     return None
 
-
+def calculate_centre_distance(path_poly, car_position, target_y=None, img_height=None):
+    if path_poly is None:
+        return None
+    if target_y is None:
+        if img_height is None:
+            print("ERROR: img_height must be provided if target_y is not given.")
+            return None
+        target_y = img_height - 1
+    path_x = find_x_at_y(path_poly, target_y)
+    distance = car_position- path_x
+    return distance
 
 def main():
     # Get the directory where this script is located
     # script_dir = os.path.dirname(os.path.abspath(__file__))
     # img_path = os.path.join(script_dir, 'test.jpg')
-    img_path='Lane_Keeping/1.jpg'  # Hoặc thay đổi đường dẫn tới ảnh của bạn ở đây
+    img_path='test.jpg'  # Hoặc thay đổi đường dẫn tới ảnh của bạn ở đây
     img = cv2.imread(img_path)
     
     if img is None:
@@ -379,11 +379,23 @@ def main():
         print("Hãy đảm bảo file ảnh nằm cùng thư mục hoặc sửa lại đường dẫn trong code.")
         return
     
+    # In file anh dang dung
+    print(f"\n=== Using Image File ===")
+    print(f"Image file: {img_path}")
 
     h = 0.225
     theta = 15
     f = 2.75e-3
     k = 1.3e-6
+    
+    # In cac tham so dang dung
+    print("\n=== Lane Detection Parameters ===")
+    print(f"h = {h}")
+    print(f"theta = {theta}")
+    print(f"f = {f}")
+    print(f"k = {k}")
+
+    
 
     path_poly, first_lane_poly, second_lane_poly = run_lane_detect(
         img,
@@ -393,30 +405,57 @@ def main():
         k=k,
         use_deprojected=False
     )
+    print("\n=== Lane Detection Results ===")
+    print(f"Suggested path: {path_poly}")
+    print(f"First path: {first_lane_poly}")
+    print(f"Second path: {second_lane_poly}")
 
-    print("suggested path", path_poly)
-    print("first path", first_lane_poly)
-    print("second path", second_lane_poly)
+    if path_poly is None:
+        print("\nNo path detected, exiting.")
+        return
+    
 
-    # 1. Tạo ảnh kết quả trước
     img_with_lanes = add_lanes_to_image(img.copy(), [path_poly, first_lane_poly, second_lane_poly])
 
-    # # 2. Tính toán khoảng cách
-    # car_position = 320 # assuming the car is at the center of a 640px wide image
-    # valid_x = find_x_at_y(path_poly, target_y=480, img_width=640)
-    
-    # if valid_x is not None:
-    #     centre_dist = (car_position - valid_x)
-    #     print(f"Khoảng cách đến tâm: {centre_dist:.2f} px")
-    #     # 3. Vẽ chữ lên ảnh kết quả (đã được define ở bước 1)
-    #     cv2.putText(img_with_lanes, f'Centre Dist: {centre_dist:.2f} px', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
-    # else:
-    #     print("Không tìm thấy đường dẫn tại y=480")
+    height, width= img.shape[:2]
+    car_position = width / 2
+    centre_dist = calculate_centre_distance(path_poly, car_position, target_y=height-1, img_height=height)
 
-    # 4. Hiển thị
-    output_file = 'Lane_Keeping/lane_detection_result.png'
+    if centre_dist is not None:
+        print(f"\n=== Centre Distance Calculation ===")
+        print(f"Center distance at bottom of image: {centre_dist:.2f} pixels")
+        print(f"Path position at y = {height-1}: {car_position - centre_dist:.2f} px")
+        print(f"Distance center: {centre_dist:.2f} px")
+
+        if centre_dist == 0:
+            print("Car is ON the path")
+        elif centre_dist < 0:
+            print("Car is LEFT of the path")
+        elif centre_dist > 0:
+            print("Car is RIGHT of the path")
+
+        cv2.putText(img_with_lanes, f'Distance: {centre_dist:.2f} px', 
+                   (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
+        
+        cv2.circle(img_with_lanes, (int(car_position), height-1), 10, (255, 0, 0), -1)
+    
+    else:
+        print("\nWarning: Cannot calculate center distance")
+    
+    
+    
+    output_file = 'lane_detection_result.png'
     cv2.imwrite(output_file, img_with_lanes)
+    print(f"\n=== Output ===")
     print(f"Result saved to {output_file}")
+
+    print("\n=== Path X at Custom Y Positions ===")
+    test_y = int(input("Enter y: "))
+    x = find_x_at_y(path_poly, test_y, img_width=width)
+    if x is not None:
+        print(f"Path x at y={test_y:3d}: {x:.2f} px")
+    else:
+        print(f"Cannot find path x at y={test_y:3d}")
 
     
 if __name__ == "__main__":
