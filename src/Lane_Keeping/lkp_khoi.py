@@ -4,6 +4,14 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 
+# them cac import de matplotlib chay headless, khong can gui, tranh loi khi chay tren ubuntu
+
+import os
+os.environ["QT_QPA_PLATFORM"] = "offscreen"
+import matplotlib
+matplotlib.use('Agg')
+
+
 def find_plateaus(img,
                   ascent_threshold=50,
                   winning_percentage=0.4,
@@ -175,13 +183,18 @@ def find_lane_points(points, labels):
 
 
 def fit_polynomial(points, degree=2, threshold=10):
+    """
+    Fits a polynomial x = f(y) to the given points.
+    Changed to fit y = f(x) for better lane representation.
+    """
     if len(points) < threshold:
         return None
     
     try:
         points = np.array(points)
-        sorted_points = points[points[:, 0].argsort()]
-        coefficients = np.polyfit(sorted_points[:, 0], sorted_points[:, 1], degree)
+        sorted_points = points[points[:, 1].argsort()]
+        # Sort diem theo index 1 (y) thay cho index 0 (x)
+        coefficients = np.polyfit(sorted_points[:, 1], sorted_points[:, 0], degree)
         return np.poly1d(coefficients)
     except Exception as e:
         print(f"Polynomial fitting error: {e}")
@@ -194,6 +207,14 @@ def suggest_path(left_lane_points, right_lane_points, diff_y=10):
     left_lane_points = left_lane_points[left_lane_points[:, 1].argsort()]
     right_lane_points = right_lane_points[right_lane_points[:, 1].argsort()]
 
+    # Sort bang y thay cho x
+    if len(left_lane_points) > 0:
+        left_lane_points = left_lane_points[left_lane_points[:, 1].argsort()]
+    if len(right_lane_points) > 0:
+        right_lane_points = right_lane_points[right_lane_points[:, 1].argsort()]
+    if len(right_lane_points) == 0 or len(left_lane_points) == 0:
+        return None
+    
     min_y_left = np.min(left_lane_points[:, 1])
     max_y_left = np.max(left_lane_points[:, 1])
     min_y_right = np.min(right_lane_points[:, 1])
@@ -261,11 +282,16 @@ def display_clusters(points, labels, cmap='rainbow', dim=([],[])):
 
 
 def display_polynomials(list_polynomials, cmap='rainbow', dim=()):
-    x = np.linspace(-100, 1000, 1000)
+    # ve bang Y 
+    y_max = 480
+    if len(dim) == 2 and len(dim[1]) >= 1:
+        y_max = dim[1][1] if len(dim[1]) == 2 else dim[1][0]
+
+    y = np.linspace(0, y_max, 100)
     colors = plt.colormaps[cmap](np.linspace(0, 1, len(list_polynomials)))
     for i, poly in enumerate(list_polynomials):
         if poly == None: continue
-        y = poly(x)
+        x = poly(y)
         plt.plot(x, -y, label=f'Line {i}', color=tuple(colors[i].tolist()))
     
     plt.xlabel('x-camera')
@@ -274,22 +300,18 @@ def display_polynomials(list_polynomials, cmap='rainbow', dim=()):
     if len(dim) == 2:
         if len(dim[0]) == 2:
             plt.xlim(dim[0][0], dim[0][1])
-        elif len(dim[0]) == 1:
-            plt.xlim(0, dim[0][0])
-
         if len(dim[1]) == 2:
             plt.ylim(dim[1][0], dim[1][1])
-        elif len(dim[1]) == 1:
-            plt.ylim(0, dim[1][0])
     plt.legend()
 
 
-def run_lane_detect(img, h, theta, f, k, eps=1e-8, use_deprojected=False, car_position=320):
+def run_lane_detect(img, h, theta, f, k, eps=1e-8, use_deprojected=False, car_position=1024):
     if type(img) == str:
         img = cv2.imread(img)
 
     height, width, _ = img.shape
     points, _ = find_plateaus(img)
+    
     deprojected = deproject_points(points, h, theta, f, k, width / 2, height / 2, eps=eps)
     labels = dbscan_cluster(deprojected, eps=0.3)
     if use_deprojected:
@@ -299,7 +321,6 @@ def run_lane_detect(img, h, theta, f, k, eps=1e-8, use_deprojected=False, car_po
     first_lane_poly = fit_polynomial(first_lane)
     second_lane_poly = fit_polynomial(second_lane)
     
-    # Trả về kết quả để hàm main có thể sử dụng
     return suggested_path_poly, first_lane_poly, second_lane_poly
 
 
@@ -308,21 +329,27 @@ def add_lanes_to_image(img, list_polynomials, points_per_polynomial=100):
         img = cv2.imread(img)
 
     h, w = img.shape[:2]
-    for y in np.linspace(0, h, points_per_polynomial):
-        y = int(y)
+    
+    # Duyệt các điểm theo chiều dọc (y) từ trên xuống dưới
+    for y in np.linspace(0, h-1, points_per_polynomial):
+        
+        # Duyệt qua từng đường line (poly)
         for poly in list_polynomials:
-            if poly == None: continue
-            coeffs = poly.coeffs.copy()
-            coeffs[-1] -= y
-            new_poly = np.poly1d(coeffs)
-            x = new_poly.roots
-            for val in x:
-                if 0 <= val < w and not np.iscomplex(val):
-                    cv2.circle(img, (int(val), int(y)), 2, (0, 255, 0), 2)
+            if poly is None: continue
+            
+            try:
+                # Tinh toạ độ x theo y, khong can giai root nx vi da fit x = f(y) o tren
+                x_val = poly(y)
+                
+                # Kiểm tra nếu x nằm trong phạm vi chiều rộng ảnh thì mới vẽ
+                if 0 <= x_val < w:
+                    cv2.circle(img, (int(x_val), int(y)), 2, (0, 255, 0), 2)
+            except Exception:
+                pass
 
     return img
 
-def find_x_at_y(poly, target_y, img_width=640):
+def find_x_at_y(poly, target_y, img_width=2048):
     if poly is None:
         return None
     coeffs = poly.coeffs.copy()
@@ -341,12 +368,16 @@ def find_x_at_y(poly, target_y, img_width=640):
 
 
 def main():
-    img_path = 'test_image.jpg'
+    # Get the directory where this script is located
+    # script_dir = os.path.dirname(os.path.abspath(__file__))
+    # img_path = os.path.join(script_dir, 'test.jpg')
+    img_path='Lane_Keeping/1.jpg'  # Hoặc thay đổi đường dẫn tới ảnh của bạn ở đây
     img = cv2.imread(img_path)
     
     if img is None:
         print(f"ERROR: Không thể đọc file ảnh '{img_path}'.")
         print("Hãy đảm bảo file ảnh nằm cùng thư mục hoặc sửa lại đường dẫn trong code.")
+        return
     
 
     h = 0.225
@@ -383,11 +414,10 @@ def main():
     #     print("Không tìm thấy đường dẫn tại y=480")
 
     # 4. Hiển thị
-    cv2.imshow('Lanes Detected', img_with_lanes)
-    print("Press any key to exit...")
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    output_file = 'Lane_Keeping/lane_detection_result.png'
+    cv2.imwrite(output_file, img_with_lanes)
+    print(f"Result saved to {output_file}")
 
     
-   
-main()
+if __name__ == "__main__":
+    main()
