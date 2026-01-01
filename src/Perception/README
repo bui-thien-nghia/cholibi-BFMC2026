@@ -1,0 +1,12 @@
+the car is currently connecting to VGU_Student_guest.
+to access the pi.
+  1.install RealVNC-viewer
+  2.sign up -> sign in
+  3.enter the CURRENT IP address of the pi (have not set a static IP).
+      connect to the same wifi
+      ping raspberrypi.local
+      if cannot, reset the pi or turn off/on the wifi on your lap
+  4.set up your own username&pass
+
+to change the wifi.
+simply access through VNC and change on the taskbar
