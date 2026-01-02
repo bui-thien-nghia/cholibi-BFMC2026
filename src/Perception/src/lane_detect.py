@@ -5,6 +5,11 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 
+# import os
+# os.environ["QT_QPA_PLATFORM"] = "offscreen"
+# import matplotlib
+# matplotlib.use('Qt5Agg')
+
 def find_plateaus(img,
                   ascent_threshold=50,
                   winning_percentage=0.4,
@@ -319,7 +324,7 @@ def add_lanes_to_image(img, list_polynomials, points_per_polynomial=100):
     return img
 
 def main():
-    img_path = 'test_image1.jpg'
+    img_path = 'test.jpg'
     img = cv2.imread(img_path)
     
     if img is None:
@@ -344,6 +349,11 @@ def main():
     plt.title('Detected Lanes and Suggested Path')
     plt.axis('off')
     plt.show()
+
+    # output_file = 'lane_detection_result.png'
+    # cv2.imwrite(output_file, img_with_lanes)
+    # print(f"\n=== Output ===")
+    # print(f"Result saved to {output_file}")
 
 if __name__ == "__main__":
     main()
