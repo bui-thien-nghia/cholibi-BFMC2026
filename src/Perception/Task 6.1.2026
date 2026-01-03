@@ -2,3 +2,6 @@ calib imu, communicate with STM32
 test image resolution
 record time delay
 check line detect with horizontal lane
+test serial bridge -> try auto-run
+test multi-image process
+test canny detector + filter
