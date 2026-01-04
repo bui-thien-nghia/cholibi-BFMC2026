@@ -1,5 +1,7 @@
 calib imu, communicate with STM32
 test image resolution
+  formula to calculate the focal length (pixels): ( physical focal length (2.75) / sensor width (6.45) ) x ImageWidth (pixels)
+  best at 640x480
 record time delay
 check line detect with horizontal lane
 test serial bridge -> try auto-run
