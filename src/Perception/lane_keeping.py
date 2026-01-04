@@ -17,7 +17,8 @@ class LaneController:
 
         # tuning parameters
         self.k_lookahead = 1.0     
-        self.min_lookahead = 40.0  
+        self.min_lookahead = 40.0
+        self.lookahead_radius = 0  
         self.k_speed = 30.0       
         self.alpha = 0.6          
         
@@ -37,11 +38,11 @@ class LaneController:
         
         self.no_lane_counter = 0 
 
-        lookahead_radius = self.min_lookahead + (self.k_lookahead * (current_speed))
-        lookahead_radius = max(self.min_lookahead, min(lookahead_radius, 120)) 
+        self.lookahead_radius = self.min_lookahead + (self.k_lookahead * (current_speed))
+        self.lookahead_radius = max(self.min_lookahead, min(self.lookahead_radius, 120)) 
 
         try:
-            gx, gy = self._find_circle_intersection(target_poly, lookahead_radius, offset_mode)
+            gx, gy = self._find_circle_intersection(target_poly, self.lookahead_radius, offset_mode)
             
         except Exception as e:
             return self.prev_steer, 0.0, "MATH_ERR"
@@ -49,7 +50,7 @@ class LaneController:
         alpha_angle = math.atan2(gx, gy) 
         
         # Steering Angle = atan(2 * L * sin(alpha) / Ld)
-        steer_rad = math.atan((2 * self.L * math.sin(alpha_angle)) / lookahead_radius)
+        steer_rad = math.atan((2 * self.L * math.sin(alpha_angle)) / self.lookahead_radius)
         steer_rad = np.clip(steer_rad, -self.max_steer, self.max_steer)
         
         # 4. Smoothing
@@ -81,31 +82,54 @@ class LaneController:
         return None, "NONE"
 
     def _find_circle_intersection(self, poly, radius, mode):
-        search_points = np.linspace(10, radius + 20, 1000)
+        # search_points = np.linspace(10, radius + 20, 1000)
         
-        best_point = (0, radius) 
-        min_dist_diff = float('inf')
+        # best_point = (0, radius) 
+        # min_dist_diff = float('inf')
 
-        for y in search_points:
-            # Calculate X at this Y
-            raw_x = poly(y)
+        # for y in search_points:
+        #     # Calculate X at this Y
+        #     raw_x = poly(y)
             
-            # Apply Offset 
-            if mode == "RIGHT_OFFSET":
-                raw_x += (self.lane_width * 0.5) 
-            elif mode == "LEFT_OFFSET":
-                raw_x -= (self.lane_width * 0.5)
+        #     # Apply Offset 
+        #     if mode == "RIGHT_OFFSET":
+        #         raw_x += (self.lane_width * 0.5) 
+        #     elif mode == "LEFT_OFFSET":
+        #         raw_x -= (self.lane_width * 0.5)
 
-            # Check Distance from Car
-            dist_from_car = math.sqrt(raw_x**2 + y**2)
+        #     # Check Distance from Car
+        #     dist_from_car = math.sqrt(raw_x**2 + y**2)
 
-            diff = abs(dist_from_car - radius)
+        #     diff = abs(dist_from_car - radius)
             
-            if diff < min_dist_diff:
-                min_dist_diff = diff
-                best_point = (raw_x, y)
+        #     if diff < min_dist_diff:
+        #         min_dist_diff = diff
+        #         best_point = (raw_x, y)
             
-            if dist_from_car > radius:
-                break
+        #     if dist_from_car > radius:
+        #         break
                 
+        # return best_point
+    
+        new_coeffs = poly.coeffs.copy()
+
+        if mode == "RIGHT_OFFSET":
+            new_coeffs[-1] += (self.lane_width * 0.5)
+        elif mode == "LEFT_OFFSET":
+            new_coeffs[-1] -= (self.lane_width * 0.5)
+        
+        poly1 = new_coeffs
+        poly2 = [1,0,0]
+        combined_poly = np.polyadd(np.polymul(poly1,poly1), poly2)
+        combined_poly[-1] -= radius**2
+        search_points = np.roots(combined_poly)
+        search_points = search_points[np.isreal(search_points)].real
+        forward_points = search_points[search_points > 0]
+        
+        if len(forward_points) == 0:
+            return (0, radius)
+        
+        y = np.min(forward_points)
+        x = np.polyval(new_coeffs, y)
+        best_point = (x,y)
         return best_point
