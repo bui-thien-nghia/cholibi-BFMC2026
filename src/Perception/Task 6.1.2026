@@ -10,5 +10,4 @@ test canny detector + filter
 
 Ref:
 https://docs.opencv.org/4.x/da/d22/tutorial_py_canny.html
-https://www.youtube.com/watch?si=p6h5uvZLQhBVWNh7&v=cdmHC0xmRbs&feature=youtu.be
 https://github.com/001zwzwzw/AtsushiSakai-PythonRobotics
