@@ -2,6 +2,8 @@ import numpy as np
 import cv2
 
 class Config:
+    # --- 0. Image Path ---
+    IMAGE = 'road7.jpeg'
     # --- 1. ROI (Region of Interest) ---
     # Cut the upper region and the under region from the roi
     ROI_START_Y = 0.45 # start taking the roi from ROI_START_Y% of the image | DEF 0.45
@@ -15,6 +17,24 @@ class Config:
     # The lowest threshold put to prevent encountering noise in the dark areas
     L_THRESH_MIN_FLOOR = 150 # the floor threshold for Light channel (white) | DEF 150
     S_THRESH_MIN_FLOOR = 100 # the floor threshold for Saturation channel (yellow) | DEF 100
+
+    # Offset to calculate the adaptive threshold
+    L_THRESH_OFFSET = 50 # the offset to subtract from the max Light channel value | DEF 50
+    S_THRESH_OFFSET = 60 # the offset to subtract from the max Saturation channel value | DEF 60
+
+    # --- 4. Curve Fitting Values ---
+    SLOPE_THRESH = 0.5 # the minimum slope to consider a line | DEF 0.5
+    ANCHOR_TOLERANCE = 50 # the tolerance from the center to consider left/right line | DEF 50
+    INTERCEPT_MARGIN = 100 # the margin to consider the intercept of the curve | DEF 100
+
+    # --- 5. Hough Transform Values ---
+    HOUGH_THRESH = 100 # the minimum number of votes (intersections in Hough grid cell) | DEF 100
+    HOUGH_MIN_LEN = 40 
+    HOUGH_MAX_GAP = 5 # this let the hough transform connect the cut line
+    
+# functions to automatically canny using the calculated median lower and upper value
+# choose between this and otsu
+# is ever used, calib the sigma value again
 def auto_canny(image, sigma=0.33):
     
     v = np.median(image)
@@ -27,53 +47,40 @@ def auto_canny(image, sigma=0.33):
     edged = cv2.Canny(image, lower, upper)
     return edged
 
+# functions to canny using the otsu binarization (thresholding)
+# choose between this and auto_canny above
 def otsu_canny(img):
     high_thresh, _ = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     low_thresh = 0.5 * high_thresh
     edged = cv2.Canny(img, int(low_thresh), int(high_thresh))
-    print(low_thresh)
-    print(high_thresh)
+    # print(low_thresh)
+    # print(high_thresh)
     return edged
 
+# function to adjust the gamma value in case running in dark areas
+# NOW UNUSED!!!
 def adjust_gamma(image, gamma=1.0):
-    """
-    Điều chỉnh độ sáng phi tuyến tính (Gamma Correction).
     
-    Tham số:
-    - image: Ảnh đầu vào (BGR hoặc Gray đều được).
-    - gamma: Hệ số điều chỉnh.
-        * gamma = 1.0: Giữ nguyên ảnh gốc.
-        * gamma > 1.0: Làm sáng ảnh (đặc biệt là vùng tối/bóng râm).
-        * gamma < 1.0: Làm tối ảnh.
-    
-    Trả về:
-    - Ảnh đã điều chỉnh gamma.
-    """
-    # 1. Tránh lỗi chia cho 0
+    # prevent to divide by zero in next step
     if gamma == 0: 
         gamma = 0.01
         
-    # 2. Tính nghịch đảo gamma
-    invGamma = 1.0 / gamma
+    invGamma = 1.0 / gamma # inversing the gamma value
 
-    # 3. Xây dựng bảng tra cứu (Lookup Table - LUT)
-    # Tính toán trước giá trị mới cho mọi mức sáng từ 0 đến 255
+    # construct the lookup table
     table = np.array([((i / 255.0) ** invGamma) * 255
                       for i in np.arange(0, 256)]).astype("uint8")
 
-    # 4. Áp dụng bảng tra cứu vào ảnh
-    # Hàm cv2.LUT sẽ thay thế giá trị pixel i bằng giá trị table[i]
     return cv2.LUT(image, table)
 
-
+# main process pipeline
 def process_pipeline_adaptive(roi_img, morph=True): 
-
-    # binary_mask = hls_color_threshold(roi_img)
     
     binary_mask = adaptive_hls_binary(roi_img)
 
+    # using morphological with both open and close including proper dilation and erosion
     if morph:
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5,5))
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5,5)) # kernel size is now (5, 5)
 
         binary_mask = cv2.morphologyEx(binary_mask, cv2.MORPH_OPEN, kernel)
         binary_mask = cv2.morphologyEx(binary_mask, cv2.MORPH_CLOSE, kernel)
@@ -83,6 +90,9 @@ def process_pipeline_adaptive(roi_img, morph=True):
     
     return closed_canny
 
+# function to get the kernel based on image shape
+# NOW UNUSED!!!
+# if used, please calib the ratio first
 def get_adaptive_kernel(image, ratio=0.01):
 
     h, w = image.shape[:2]
@@ -201,16 +211,6 @@ def draw_equations(img, left_fit, right_fit):
     else:
         draw_text_with_outline("R: Not Detected", margin_x, start_y + line_spacing)
 
-def hls_color_threshold(img):
-    hls = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
-    l_channel = hls[:,:,1]
-    s_channel = hls[:,:,2]
-
-    l_mask = cv2.inRange(l_channel, 218, 255)
-    s_mask = cv2.inRange(s_channel, 201, 255)
-
-    combined_mask = cv2.bitwise_or(l_mask, s_mask)
-    return combined_mask
 
 def adaptive_hls_binary(image):
     hls = cv2.cvtColor(image, cv2.COLOR_BGR2HLS)
@@ -233,7 +233,7 @@ def adaptive_hls_binary(image):
     return combined
 
 def main():
-    img = cv2.imread('image0090.jpg')
+    img = cv2.imread(Config.IMAGE)
     if img is None: return
 
     height, width = img.shape[:2]
