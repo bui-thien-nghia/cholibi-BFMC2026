@@ -1,0 +1,25 @@
+[0.702s] Invoking command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_hardware': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_hardware build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/install.log --single-version-externally-managed install_data
+[0.878s] running egg_info
+[0.879s] writing ../../build/bfmc_hardware/bfmc_hardware.egg-info/PKG-INFO
+[0.879s] writing dependency_links to ../../build/bfmc_hardware/bfmc_hardware.egg-info/dependency_links.txt
+[0.879s] writing entry points to ../../build/bfmc_hardware/bfmc_hardware.egg-info/entry_points.txt
+[0.879s] writing requirements to ../../build/bfmc_hardware/bfmc_hardware.egg-info/requires.txt
+[0.879s] writing top-level names to ../../build/bfmc_hardware/bfmc_hardware.egg-info/top_level.txt
+[0.880s] reading manifest file '../../build/bfmc_hardware/bfmc_hardware.egg-info/SOURCES.txt'
+[0.887s] writing manifest file '../../build/bfmc_hardware/bfmc_hardware.egg-info/SOURCES.txt'
+[0.887s] running build
+[0.887s] running build_py
+[0.887s] copying bfmc_hardware/serial_node.py -> /home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/build/lib/bfmc_hardware
+[0.888s] running install
+[0.888s] running install_lib
+[0.889s] copying /home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/build/lib/bfmc_hardware/serial_node.py -> /home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/lib/python3.10/site-packages/bfmc_hardware
+[0.889s] byte-compiling /home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/lib/python3.10/site-packages/bfmc_hardware/serial_node.py to serial_node.cpython-310.pyc
+[0.890s] running install_data
+[0.890s] running install_egg_info
+[0.891s] removing '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/lib/python3.10/site-packages/bfmc_hardware-0.0.0-py3.10.egg-info' (and everything under it)
+[0.891s] Copying ../../build/bfmc_hardware/bfmc_hardware.egg-info to /home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/lib/python3.10/site-packages/bfmc_hardware-0.0.0-py3.10.egg-info
+[0.892s] running install_scripts
+[0.908s] Installing camera_node script to /home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/lib/bfmc_hardware
+[0.908s] Installing serial_node script to /home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/lib/bfmc_hardware
+[0.909s] writing list of installed files to '/home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/install.log'
+[0.938s] Invoked command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_hardware' returned '0': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_hardware build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/install.log --single-version-externally-managed install_data

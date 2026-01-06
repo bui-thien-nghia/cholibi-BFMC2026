@@ -1,0 +1,21 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/bfmc_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/bfmc_interfaces/msg/detail/control__type_support.c.o"
+  "CMakeFiles/bfmc_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/bfmc_interfaces/msg/detail/control__type_support.c.o.d"
+  "CMakeFiles/bfmc_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/bfmc_interfaces/msg/detail/lane_info__type_support.c.o"
+  "CMakeFiles/bfmc_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/bfmc_interfaces/msg/detail/lane_info__type_support.c.o.d"
+  "CMakeFiles/bfmc_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/bfmc_interfaces/msg/detail/serial_status__type_support.c.o"
+  "CMakeFiles/bfmc_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/bfmc_interfaces/msg/detail/serial_status__type_support.c.o.d"
+  "libbfmc_interfaces__rosidl_typesupport_introspection_c.pdb"
+  "libbfmc_interfaces__rosidl_typesupport_introspection_c.so"
+  "rosidl_typesupport_introspection_c/bfmc_interfaces/msg/detail/control__rosidl_typesupport_introspection_c.h"
+  "rosidl_typesupport_introspection_c/bfmc_interfaces/msg/detail/control__type_support.c"
+  "rosidl_typesupport_introspection_c/bfmc_interfaces/msg/detail/lane_info__rosidl_typesupport_introspection_c.h"
+  "rosidl_typesupport_introspection_c/bfmc_interfaces/msg/detail/lane_info__type_support.c"
+  "rosidl_typesupport_introspection_c/bfmc_interfaces/msg/detail/serial_status__rosidl_typesupport_introspection_c.h"
+  "rosidl_typesupport_introspection_c/bfmc_interfaces/msg/detail/serial_status__type_support.c"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang C)
+  include(CMakeFiles/bfmc_interfaces__rosidl_typesupport_introspection_c.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

@@ -1,0 +1,42 @@
+[0.587s] Invoking command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_brain': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_brain build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/install.log --single-version-externally-managed install_data
+[0.785s] running egg_info
+[0.786s] creating ../../build/bfmc_brain/bfmc_brain.egg-info
+[0.786s] writing ../../build/bfmc_brain/bfmc_brain.egg-info/PKG-INFO
+[0.786s] writing dependency_links to ../../build/bfmc_brain/bfmc_brain.egg-info/dependency_links.txt
+[0.786s] writing entry points to ../../build/bfmc_brain/bfmc_brain.egg-info/entry_points.txt
+[0.787s] writing requirements to ../../build/bfmc_brain/bfmc_brain.egg-info/requires.txt
+[0.787s] writing top-level names to ../../build/bfmc_brain/bfmc_brain.egg-info/top_level.txt
+[0.787s] writing manifest file '../../build/bfmc_brain/bfmc_brain.egg-info/SOURCES.txt'
+[0.788s] reading manifest file '../../build/bfmc_brain/bfmc_brain.egg-info/SOURCES.txt'
+[0.789s] writing manifest file '../../build/bfmc_brain/bfmc_brain.egg-info/SOURCES.txt'
+[0.789s] running build
+[0.789s] running build_py
+[0.790s] creating /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/build
+[0.790s] creating /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/build/lib
+[0.790s] creating /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/build/lib/bfmc_brain
+[0.790s] copying bfmc_brain/lane_keeping.py -> /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/build/lib/bfmc_brain
+[0.790s] copying bfmc_brain/control_node.py -> /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/build/lib/bfmc_brain
+[0.790s] copying bfmc_brain/__init__.py -> /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/build/lib/bfmc_brain
+[0.790s] running install
+[0.791s] running install_lib
+[0.792s] creating /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/python3.10/site-packages/bfmc_brain
+[0.792s] copying /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/build/lib/bfmc_brain/lane_keeping.py -> /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/python3.10/site-packages/bfmc_brain
+[0.792s] copying /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/build/lib/bfmc_brain/control_node.py -> /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/python3.10/site-packages/bfmc_brain
+[0.792s] copying /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/build/lib/bfmc_brain/__init__.py -> /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/python3.10/site-packages/bfmc_brain
+[0.793s] byte-compiling /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/python3.10/site-packages/bfmc_brain/lane_keeping.py to lane_keeping.cpython-310.pyc
+[0.794s] byte-compiling /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/python3.10/site-packages/bfmc_brain/control_node.py to control_node.cpython-310.pyc
+[0.794s] byte-compiling /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/python3.10/site-packages/bfmc_brain/__init__.py to __init__.cpython-310.pyc
+[0.794s] running install_data
+[0.794s] creating /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share
+[0.795s] creating /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/ament_index
+[0.795s] creating /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/ament_index/resource_index
+[0.795s] creating /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/ament_index/resource_index/packages
+[0.795s] copying resource/bfmc_brain -> /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/ament_index/resource_index/packages
+[0.795s] creating /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/bfmc_brain
+[0.795s] copying package.xml -> /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/bfmc_brain
+[0.795s] running install_egg_info
+[0.799s] Copying ../../build/bfmc_brain/bfmc_brain.egg-info to /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/python3.10/site-packages/bfmc_brain-0.0.0-py3.10.egg-info
+[0.799s] running install_scripts
+[0.819s] Installing lane_keeping_node script to /home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/bfmc_brain
+[0.820s] writing list of installed files to '/home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/install.log'
+[0.849s] Invoked command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_brain' returned '0': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_brain build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/install.log --single-version-externally-managed install_data

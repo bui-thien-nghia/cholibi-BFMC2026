@@ -1,0 +1,3 @@
+[console_scripts]
+lane_detector = bfmc_perception.lane_detector_node:main
+

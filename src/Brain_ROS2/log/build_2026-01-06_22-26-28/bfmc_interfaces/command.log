@@ -1,0 +1,4 @@
+Invoking command in '/home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces -- -j12 -l12
+Invoked command in '/home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces -- -j12 -l12
+Invoking command in '/home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces
+Invoked command in '/home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces

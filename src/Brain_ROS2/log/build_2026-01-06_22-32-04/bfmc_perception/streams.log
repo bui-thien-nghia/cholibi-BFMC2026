@@ -1,0 +1,24 @@
+[0.933s] Invoking command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_perception': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_perception build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/install.log --single-version-externally-managed install_data
+[1.139s] running egg_info
+[1.140s] writing ../../build/bfmc_perception/bfmc_perception.egg-info/PKG-INFO
+[1.144s] writing dependency_links to ../../build/bfmc_perception/bfmc_perception.egg-info/dependency_links.txt
+[1.144s] writing entry points to ../../build/bfmc_perception/bfmc_perception.egg-info/entry_points.txt
+[1.144s] writing requirements to ../../build/bfmc_perception/bfmc_perception.egg-info/requires.txt
+[1.145s] writing top-level names to ../../build/bfmc_perception/bfmc_perception.egg-info/top_level.txt
+[1.147s] reading manifest file '../../build/bfmc_perception/bfmc_perception.egg-info/SOURCES.txt'
+[1.148s] writing manifest file '../../build/bfmc_perception/bfmc_perception.egg-info/SOURCES.txt'
+[1.148s] running build
+[1.148s] running build_py
+[1.148s] copying bfmc_perception/lane_detector_node.py -> /home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/build/lib/bfmc_perception
+[1.148s] running install
+[1.148s] running install_lib
+[1.150s] copying /home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/build/lib/bfmc_perception/lane_detector_node.py -> /home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/lib/python3.10/site-packages/bfmc_perception
+[1.151s] byte-compiling /home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/lib/python3.10/site-packages/bfmc_perception/lane_detector_node.py to lane_detector_node.cpython-310.pyc
+[1.151s] running install_data
+[1.151s] running install_egg_info
+[1.153s] removing '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/lib/python3.10/site-packages/bfmc_perception-0.0.0-py3.10.egg-info' (and everything under it)
+[1.153s] Copying ../../build/bfmc_perception/bfmc_perception.egg-info to /home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/lib/python3.10/site-packages/bfmc_perception-0.0.0-py3.10.egg-info
+[1.154s] running install_scripts
+[1.172s] Installing lane_detector script to /home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/lib/bfmc_perception
+[1.172s] writing list of installed files to '/home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/install.log'
+[1.210s] Invoked command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_perception' returned '0': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_perception build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/install.log --single-version-externally-managed install_data

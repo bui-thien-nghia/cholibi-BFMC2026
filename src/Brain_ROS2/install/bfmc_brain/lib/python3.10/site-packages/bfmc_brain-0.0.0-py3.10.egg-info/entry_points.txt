@@ -1,0 +1,3 @@
+[console_scripts]
+lane_keeping_node = bfmc_brain.control_node:main
+

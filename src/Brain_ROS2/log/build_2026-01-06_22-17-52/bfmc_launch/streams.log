@@ -1,0 +1,20 @@
+[0.967s] Invoking command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_launch': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_launch/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_launch build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_launch/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_launch/install.log --single-version-externally-managed install_data
+[1.145s] running egg_info
+[1.145s] writing ../../build/bfmc_launch/bfmc_launch.egg-info/PKG-INFO
+[1.145s] writing dependency_links to ../../build/bfmc_launch/bfmc_launch.egg-info/dependency_links.txt
+[1.146s] writing entry points to ../../build/bfmc_launch/bfmc_launch.egg-info/entry_points.txt
+[1.146s] writing requirements to ../../build/bfmc_launch/bfmc_launch.egg-info/requires.txt
+[1.146s] writing top-level names to ../../build/bfmc_launch/bfmc_launch.egg-info/top_level.txt
+[1.147s] reading manifest file '../../build/bfmc_launch/bfmc_launch.egg-info/SOURCES.txt'
+[1.148s] writing manifest file '../../build/bfmc_launch/bfmc_launch.egg-info/SOURCES.txt'
+[1.148s] running build
+[1.148s] running build_py
+[1.148s] running install
+[1.148s] running install_lib
+[1.150s] running install_data
+[1.150s] running install_egg_info
+[1.151s] removing '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/lib/python3.10/site-packages/bfmc_launch-0.0.0-py3.10.egg-info' (and everything under it)
+[1.151s] Copying ../../build/bfmc_launch/bfmc_launch.egg-info to /home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/lib/python3.10/site-packages/bfmc_launch-0.0.0-py3.10.egg-info
+[1.152s] running install_scripts
+[1.168s] writing list of installed files to '/home/kyrgios/Documents/bfmc_ws/build/bfmc_launch/install.log'
+[1.190s] Invoked command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_launch' returned '0': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_launch/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_launch build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_launch/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_launch/install.log --single-version-externally-managed install_data

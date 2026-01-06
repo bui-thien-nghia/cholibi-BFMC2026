@@ -1,0 +1,382 @@
+[0.109s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.109s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=12, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7cf6e7e69b40>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7cf6e7fe68c0>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7cf6e7fe68c0>>)
+[0.289s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.289s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.289s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.289s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.289s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.289s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.289s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/kyrgios/Documents/bfmc_ws'
+[0.289s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.289s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.289s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.289s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.289s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.289s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.289s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.289s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.289s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.328s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.328s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.328s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(__pycache__) by extensions ['ignore', 'ignore_ament_install']
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(__pycache__) by extension 'ignore'
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(__pycache__) by extension 'ignore_ament_install'
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(__pycache__) by extensions ['colcon_pkg']
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(__pycache__) by extension 'colcon_pkg'
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(__pycache__) by extensions ['colcon_meta']
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(__pycache__) by extension 'colcon_meta'
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(__pycache__) by extensions ['ros']
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(__pycache__) by extension 'ros'
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(__pycache__) by extensions ['cmake', 'python']
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(__pycache__) by extension 'cmake'
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(__pycache__) by extension 'python'
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(__pycache__) by extensions ['python_setup_py']
+[0.329s] Level 1:colcon.colcon_core.package_identification:_identify(__pycache__) by extension 'python_setup_py'
+[0.330s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.330s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.330s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.330s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.330s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.330s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.330s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.330s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.330s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.330s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[0.330s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_brain) by extensions ['ignore', 'ignore_ament_install']
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_brain) by extension 'ignore'
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_brain) by extension 'ignore_ament_install'
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_brain) by extensions ['colcon_pkg']
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_brain) by extension 'colcon_pkg'
+[0.331s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_brain) by extensions ['colcon_meta']
+[0.332s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_brain) by extension 'colcon_meta'
+[0.332s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_brain) by extensions ['ros']
+[0.332s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_brain) by extension 'ros'
+[0.334s] DEBUG:colcon.colcon_core.package_identification:Found ROS schema reference in package manifest in 'src/bfmc_brain'
+[0.334s] WARNING:colcon.colcon_core.package_identification:Failed to parse ROS package manifest in 'src/bfmc_brain': Error(s) in package 'src/bfmc_brain/package.xml':
+Error(s):
+- The generic dependency on 'std_msgs' is redundant with: build_depend, build_export_depend, exec_depend
+[0.334s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_brain) by extensions ['cmake', 'python']
+[0.334s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_brain) by extension 'cmake'
+[0.334s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_brain) by extension 'python'
+[0.334s] DEBUG:colcon.colcon_core.package_identification:Python package in 'src/bfmc_brain' passes arguments to the setup() function which requires a different identification extension than 'python'
+[0.334s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_brain) by extensions ['python_setup_py']
+[0.334s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_brain) by extension 'python_setup_py'
+[0.602s] DEBUG:colcon.colcon_core.package_identification:Package 'src/bfmc_brain' with type 'python' and name 'bfmc_brain'
+[0.602s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_hardware) by extensions ['ignore', 'ignore_ament_install']
+[0.602s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_hardware) by extension 'ignore'
+[0.602s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_hardware) by extension 'ignore_ament_install'
+[0.602s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_hardware) by extensions ['colcon_pkg']
+[0.602s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_hardware) by extension 'colcon_pkg'
+[0.602s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_hardware) by extensions ['colcon_meta']
+[0.602s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_hardware) by extension 'colcon_meta'
+[0.602s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_hardware) by extensions ['ros']
+[0.602s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_hardware) by extension 'ros'
+[0.604s] DEBUG:colcon.colcon_core.package_identification:Package 'src/bfmc_hardware' with type 'ros.ament_python' and name 'bfmc_hardware'
+[0.604s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_interfaces) by extensions ['ignore', 'ignore_ament_install']
+[0.604s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_interfaces) by extension 'ignore'
+[0.605s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_interfaces) by extension 'ignore_ament_install'
+[0.605s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_interfaces) by extensions ['colcon_pkg']
+[0.605s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_interfaces) by extension 'colcon_pkg'
+[0.605s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_interfaces) by extensions ['colcon_meta']
+[0.605s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_interfaces) by extension 'colcon_meta'
+[0.605s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_interfaces) by extensions ['ros']
+[0.605s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_interfaces) by extension 'ros'
+[0.605s] DEBUG:colcon.colcon_core.package_identification:Package 'src/bfmc_interfaces' with type 'ros.ament_cmake' and name 'bfmc_interfaces'
+[0.606s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_launch) by extensions ['ignore', 'ignore_ament_install']
+[0.606s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_launch) by extension 'ignore'
+[0.606s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_launch) by extension 'ignore_ament_install'
+[0.606s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_launch) by extensions ['colcon_pkg']
+[0.606s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_launch) by extension 'colcon_pkg'
+[0.606s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_launch) by extensions ['colcon_meta']
+[0.606s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_launch) by extension 'colcon_meta'
+[0.606s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_launch) by extensions ['ros']
+[0.606s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_launch) by extension 'ros'
+[0.606s] DEBUG:colcon.colcon_core.package_identification:Package 'src/bfmc_launch' with type 'ros.ament_python' and name 'bfmc_launch'
+[0.607s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_perception) by extensions ['ignore', 'ignore_ament_install']
+[0.607s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_perception) by extension 'ignore'
+[0.607s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_perception) by extension 'ignore_ament_install'
+[0.607s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_perception) by extensions ['colcon_pkg']
+[0.607s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_perception) by extension 'colcon_pkg'
+[0.607s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_perception) by extensions ['colcon_meta']
+[0.607s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_perception) by extension 'colcon_meta'
+[0.607s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_perception) by extensions ['ros']
+[0.607s] Level 1:colcon.colcon_core.package_identification:_identify(src/bfmc_perception) by extension 'ros'
+[0.608s] DEBUG:colcon.colcon_core.package_identification:Package 'src/bfmc_perception' with type 'ros.ament_python' and name 'bfmc_perception'
+[0.608s] Level 1:colcon.colcon_core.package_identification:_identify(test) by extensions ['ignore', 'ignore_ament_install']
+[0.608s] Level 1:colcon.colcon_core.package_identification:_identify(test) by extension 'ignore'
+[0.608s] Level 1:colcon.colcon_core.package_identification:_identify(test) by extension 'ignore_ament_install'
+[0.608s] Level 1:colcon.colcon_core.package_identification:_identify(test) by extensions ['colcon_pkg']
+[0.608s] Level 1:colcon.colcon_core.package_identification:_identify(test) by extension 'colcon_pkg'
+[0.608s] Level 1:colcon.colcon_core.package_identification:_identify(test) by extensions ['colcon_meta']
+[0.608s] Level 1:colcon.colcon_core.package_identification:_identify(test) by extension 'colcon_meta'
+[0.608s] Level 1:colcon.colcon_core.package_identification:_identify(test) by extensions ['ros']
+[0.608s] Level 1:colcon.colcon_core.package_identification:_identify(test) by extension 'ros'
+[0.608s] Level 1:colcon.colcon_core.package_identification:_identify(test) by extensions ['cmake', 'python']
+[0.609s] Level 1:colcon.colcon_core.package_identification:_identify(test) by extension 'cmake'
+[0.609s] Level 1:colcon.colcon_core.package_identification:_identify(test) by extension 'python'
+[0.609s] Level 1:colcon.colcon_core.package_identification:_identify(test) by extensions ['python_setup_py']
+[0.609s] Level 1:colcon.colcon_core.package_identification:_identify(test) by extension 'python_setup_py'
+[0.609s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.609s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.609s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.609s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.609s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.631s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.631s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.632s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.632s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.633s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 3 installed packages in /home/kyrgios/Documents/bfmc_ws/install
+[0.634s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 314 installed packages in /opt/ros/humble
+[0.636s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.676s] Level 5:colcon.colcon_core.verb:set package 'bfmc_brain' build argument 'cmake_args' from command line to 'None'
+[0.676s] Level 5:colcon.colcon_core.verb:set package 'bfmc_brain' build argument 'cmake_target' from command line to 'None'
+[0.676s] Level 5:colcon.colcon_core.verb:set package 'bfmc_brain' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.676s] Level 5:colcon.colcon_core.verb:set package 'bfmc_brain' build argument 'cmake_clean_cache' from command line to 'False'
+[0.676s] Level 5:colcon.colcon_core.verb:set package 'bfmc_brain' build argument 'cmake_clean_first' from command line to 'False'
+[0.677s] Level 5:colcon.colcon_core.verb:set package 'bfmc_brain' build argument 'cmake_force_configure' from command line to 'False'
+[0.677s] Level 5:colcon.colcon_core.verb:set package 'bfmc_brain' build argument 'ament_cmake_args' from command line to 'None'
+[0.677s] Level 5:colcon.colcon_core.verb:set package 'bfmc_brain' build argument 'catkin_cmake_args' from command line to 'None'
+[0.677s] Level 5:colcon.colcon_core.verb:set package 'bfmc_brain' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.677s] DEBUG:colcon.colcon_core.verb:Building package 'bfmc_brain' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/kyrgios/Documents/bfmc_ws/build/bfmc_brain', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain', 'merge_install': False, 'path': '/home/kyrgios/Documents/bfmc_ws/src/bfmc_brain', 'symlink_install': False, 'test_result_base': None}
+[0.677s] Level 5:colcon.colcon_core.verb:set package 'bfmc_interfaces' build argument 'cmake_args' from command line to 'None'
+[0.677s] Level 5:colcon.colcon_core.verb:set package 'bfmc_interfaces' build argument 'cmake_target' from command line to 'None'
+[0.677s] Level 5:colcon.colcon_core.verb:set package 'bfmc_interfaces' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.677s] Level 5:colcon.colcon_core.verb:set package 'bfmc_interfaces' build argument 'cmake_clean_cache' from command line to 'False'
+[0.677s] Level 5:colcon.colcon_core.verb:set package 'bfmc_interfaces' build argument 'cmake_clean_first' from command line to 'False'
+[0.677s] Level 5:colcon.colcon_core.verb:set package 'bfmc_interfaces' build argument 'cmake_force_configure' from command line to 'False'
+[0.677s] Level 5:colcon.colcon_core.verb:set package 'bfmc_interfaces' build argument 'ament_cmake_args' from command line to 'None'
+[0.677s] Level 5:colcon.colcon_core.verb:set package 'bfmc_interfaces' build argument 'catkin_cmake_args' from command line to 'None'
+[0.677s] Level 5:colcon.colcon_core.verb:set package 'bfmc_interfaces' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.677s] DEBUG:colcon.colcon_core.verb:Building package 'bfmc_interfaces' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces', 'merge_install': False, 'path': '/home/kyrgios/Documents/bfmc_ws/src/bfmc_interfaces', 'symlink_install': False, 'test_result_base': None}
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_launch' build argument 'cmake_args' from command line to 'None'
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_launch' build argument 'cmake_target' from command line to 'None'
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_launch' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_launch' build argument 'cmake_clean_cache' from command line to 'False'
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_launch' build argument 'cmake_clean_first' from command line to 'False'
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_launch' build argument 'cmake_force_configure' from command line to 'False'
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_launch' build argument 'ament_cmake_args' from command line to 'None'
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_launch' build argument 'catkin_cmake_args' from command line to 'None'
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_launch' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.678s] DEBUG:colcon.colcon_core.verb:Building package 'bfmc_launch' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/kyrgios/Documents/bfmc_ws/build/bfmc_launch', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch', 'merge_install': False, 'path': '/home/kyrgios/Documents/bfmc_ws/src/bfmc_launch', 'symlink_install': False, 'test_result_base': None}
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_hardware' build argument 'cmake_args' from command line to 'None'
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_hardware' build argument 'cmake_target' from command line to 'None'
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_hardware' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_hardware' build argument 'cmake_clean_cache' from command line to 'False'
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_hardware' build argument 'cmake_clean_first' from command line to 'False'
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_hardware' build argument 'cmake_force_configure' from command line to 'False'
+[0.678s] Level 5:colcon.colcon_core.verb:set package 'bfmc_hardware' build argument 'ament_cmake_args' from command line to 'None'
+[0.679s] Level 5:colcon.colcon_core.verb:set package 'bfmc_hardware' build argument 'catkin_cmake_args' from command line to 'None'
+[0.679s] Level 5:colcon.colcon_core.verb:set package 'bfmc_hardware' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.679s] DEBUG:colcon.colcon_core.verb:Building package 'bfmc_hardware' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware', 'merge_install': False, 'path': '/home/kyrgios/Documents/bfmc_ws/src/bfmc_hardware', 'symlink_install': False, 'test_result_base': None}
+[0.679s] Level 5:colcon.colcon_core.verb:set package 'bfmc_perception' build argument 'cmake_args' from command line to 'None'
+[0.679s] Level 5:colcon.colcon_core.verb:set package 'bfmc_perception' build argument 'cmake_target' from command line to 'None'
+[0.679s] Level 5:colcon.colcon_core.verb:set package 'bfmc_perception' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.679s] Level 5:colcon.colcon_core.verb:set package 'bfmc_perception' build argument 'cmake_clean_cache' from command line to 'False'
+[0.679s] Level 5:colcon.colcon_core.verb:set package 'bfmc_perception' build argument 'cmake_clean_first' from command line to 'False'
+[0.679s] Level 5:colcon.colcon_core.verb:set package 'bfmc_perception' build argument 'cmake_force_configure' from command line to 'False'
+[0.679s] Level 5:colcon.colcon_core.verb:set package 'bfmc_perception' build argument 'ament_cmake_args' from command line to 'None'
+[0.679s] Level 5:colcon.colcon_core.verb:set package 'bfmc_perception' build argument 'catkin_cmake_args' from command line to 'None'
+[0.679s] Level 5:colcon.colcon_core.verb:set package 'bfmc_perception' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.679s] DEBUG:colcon.colcon_core.verb:Building package 'bfmc_perception' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/kyrgios/Documents/bfmc_ws/build/bfmc_perception', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception', 'merge_install': False, 'path': '/home/kyrgios/Documents/bfmc_ws/src/bfmc_perception', 'symlink_install': False, 'test_result_base': None}
+[0.679s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.681s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.681s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_interfaces' with build type 'ament_cmake'
+[0.681s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_interfaces'
+[0.683s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.684s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.684s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.688s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_brain'
+[0.688s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.688s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.693s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_launch' with build type 'ament_python'
+[0.693s] Level 1:colcon.colcon_core.shell:create_environment_hook('bfmc_launch', 'ament_prefix_path')
+[0.693s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/share/bfmc_launch/hook/ament_prefix_path.ps1'
+[0.694s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/share/bfmc_launch/hook/ament_prefix_path.dsv'
+[0.695s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/share/bfmc_launch/hook/ament_prefix_path.sh'
+[0.695s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.696s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.705s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception:/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch:/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware:/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain:/opt/ros/humble /usr/bin/cmake --build /home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces -- -j12 -l12
+[1.168s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_launch'
+[1.168s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.168s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.172s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception:/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch:/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware:/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain:/opt/ros/humble /usr/bin/cmake --build /home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces -- -j12 -l12
+[1.181s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception:/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch:/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware:/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain:/opt/ros/humble /usr/bin/cmake --install /home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces
+[1.231s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(bfmc_interfaces)
+[1.232s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception:/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch:/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware:/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain:/opt/ros/humble /usr/bin/cmake --install /home/kyrgios/Documents/bfmc_ws/build/bfmc_interfaces
+[1.234s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces' for CMake module files
+[1.234s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces' for CMake config files
+[1.235s] Level 1:colcon.colcon_core.shell:create_environment_hook('bfmc_interfaces', 'cmake_prefix_path')
+[1.235s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/hook/cmake_prefix_path.ps1'
+[1.235s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/hook/cmake_prefix_path.dsv'
+[1.236s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/hook/cmake_prefix_path.sh'
+[1.236s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/lib'
+[1.236s] Level 1:colcon.colcon_core.shell:create_environment_hook('bfmc_interfaces', 'ld_library_path_lib')
+[1.236s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/hook/ld_library_path_lib.ps1'
+[1.237s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/hook/ld_library_path_lib.dsv'
+[1.237s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/hook/ld_library_path_lib.sh'
+[1.237s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/bin'
+[1.237s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/lib/pkgconfig/bfmc_interfaces.pc'
+[1.238s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/lib/python3.10/site-packages'
+[1.238s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/bin'
+[1.239s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/package.ps1'
+[1.239s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/package.dsv'
+[1.240s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/package.sh'
+[1.240s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/package.bash'
+[1.241s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/package.zsh'
+[1.242s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/colcon-core/packages/bfmc_interfaces)
+[1.242s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(bfmc_interfaces)
+[1.242s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces' for CMake module files
+[1.243s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces' for CMake config files
+[1.243s] Level 1:colcon.colcon_core.shell:create_environment_hook('bfmc_interfaces', 'cmake_prefix_path')
+[1.243s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/hook/cmake_prefix_path.ps1'
+[1.244s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/hook/cmake_prefix_path.dsv'
+[1.244s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/hook/cmake_prefix_path.sh'
+[1.245s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/lib'
+[1.245s] Level 1:colcon.colcon_core.shell:create_environment_hook('bfmc_interfaces', 'ld_library_path_lib')
+[1.245s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/hook/ld_library_path_lib.ps1'
+[1.245s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/hook/ld_library_path_lib.dsv'
+[1.245s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/hook/ld_library_path_lib.sh'
+[1.246s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/bin'
+[1.246s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/lib/pkgconfig/bfmc_interfaces.pc'
+[1.246s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/lib/python3.10/site-packages'
+[1.246s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/bin'
+[1.246s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/package.ps1'
+[1.247s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/package.dsv'
+[1.247s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/package.sh'
+[1.247s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/package.bash'
+[1.248s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/bfmc_interfaces/package.zsh'
+[1.248s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/kyrgios/Documents/bfmc_ws/install/bfmc_interfaces/share/colcon-core/packages/bfmc_interfaces)
+[1.249s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_hardware' with build type 'ament_python'
+[1.249s] Level 1:colcon.colcon_core.shell:create_environment_hook('bfmc_hardware', 'ament_prefix_path')
+[1.249s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/share/bfmc_hardware/hook/ament_prefix_path.ps1'
+[1.249s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/share/bfmc_hardware/hook/ament_prefix_path.dsv'
+[1.250s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/share/bfmc_hardware/hook/ament_prefix_path.sh'
+[1.250s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.250s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.253s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_perception' with build type 'ament_python'
+[1.253s] Level 1:colcon.colcon_core.shell:create_environment_hook('bfmc_perception', 'ament_prefix_path')
+[1.253s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/share/bfmc_perception/hook/ament_prefix_path.ps1'
+[1.253s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/share/bfmc_perception/hook/ament_prefix_path.dsv'
+[1.254s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/share/bfmc_perception/hook/ament_prefix_path.sh'
+[1.254s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.254s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.259s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_brain': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_brain build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/install.log --single-version-externally-managed install_data
+[1.471s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_hardware'
+[1.472s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.472s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.669s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_perception'
+[1.669s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.669s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.676s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_launch': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_launch/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_launch build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_launch/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_launch/install.log --single-version-externally-managed install_data
+[1.677s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain' for CMake module files
+[1.677s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_brain' returned '0': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_brain build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_brain/install.log --single-version-externally-managed install_data
+[1.677s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain' for CMake config files
+[1.678s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib'
+[1.678s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/bin'
+[1.678s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/pkgconfig/bfmc_brain.pc'
+[1.678s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/lib/python3.10/site-packages'
+[1.678s] Level 1:colcon.colcon_core.shell:create_environment_hook('bfmc_brain', 'pythonpath')
+[1.678s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/bfmc_brain/hook/pythonpath.ps1'
+[1.679s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/bfmc_brain/hook/pythonpath.dsv'
+[1.679s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/bfmc_brain/hook/pythonpath.sh'
+[1.679s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/bin'
+[1.680s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(bfmc_brain)
+[1.680s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/bfmc_brain/package.ps1'
+[1.680s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/bfmc_brain/package.dsv'
+[1.680s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/bfmc_brain/package.sh'
+[1.681s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/bfmc_brain/package.bash'
+[1.681s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/bfmc_brain/package.zsh'
+[1.681s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/kyrgios/Documents/bfmc_ws/install/bfmc_brain/share/colcon-core/packages/bfmc_brain)
+[1.904s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch' for CMake module files
+[1.904s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_launch' returned '0': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_launch/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_launch build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_launch/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_launch/install.log --single-version-externally-managed install_data
+[1.905s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch' for CMake config files
+[1.905s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/lib'
+[1.905s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/bin'
+[1.905s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/lib/pkgconfig/bfmc_launch.pc'
+[1.905s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/lib/python3.10/site-packages'
+[1.905s] Level 1:colcon.colcon_core.shell:create_environment_hook('bfmc_launch', 'pythonpath')
+[1.905s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/share/bfmc_launch/hook/pythonpath.ps1'
+[1.906s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/share/bfmc_launch/hook/pythonpath.dsv'
+[1.906s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/share/bfmc_launch/hook/pythonpath.sh'
+[1.907s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/bin'
+[1.907s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(bfmc_launch)
+[1.907s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/share/bfmc_launch/package.ps1'
+[1.907s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/share/bfmc_launch/package.dsv'
+[1.908s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/share/bfmc_launch/package.sh'
+[1.908s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/share/bfmc_launch/package.bash'
+[1.909s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/share/bfmc_launch/package.zsh'
+[1.909s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/kyrgios/Documents/bfmc_ws/install/bfmc_launch/share/colcon-core/packages/bfmc_launch)
+[1.959s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_hardware': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_hardware build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/install.log --single-version-externally-managed install_data
+[1.971s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_perception': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_perception build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/install.log --single-version-externally-managed install_data
+[2.188s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware' for CMake module files
+[2.188s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_hardware' returned '0': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_hardware build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_hardware/install.log --single-version-externally-managed install_data
+[2.189s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware' for CMake config files
+[2.189s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/lib'
+[2.189s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/bin'
+[2.189s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/lib/pkgconfig/bfmc_hardware.pc'
+[2.190s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/lib/python3.10/site-packages'
+[2.190s] Level 1:colcon.colcon_core.shell:create_environment_hook('bfmc_hardware', 'pythonpath')
+[2.190s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/share/bfmc_hardware/hook/pythonpath.ps1'
+[2.191s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/share/bfmc_hardware/hook/pythonpath.dsv'
+[2.191s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/share/bfmc_hardware/hook/pythonpath.sh'
+[2.192s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/bin'
+[2.192s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(bfmc_hardware)
+[2.192s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/share/bfmc_hardware/package.ps1'
+[2.192s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/share/bfmc_hardware/package.dsv'
+[2.193s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/share/bfmc_hardware/package.sh'
+[2.193s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/share/bfmc_hardware/package.bash'
+[2.193s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/share/bfmc_hardware/package.zsh'
+[2.193s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/kyrgios/Documents/bfmc_ws/install/bfmc_hardware/share/colcon-core/packages/bfmc_hardware)
+[2.195s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception' for CMake module files
+[2.195s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/kyrgios/Documents/bfmc_ws/src/bfmc_perception' returned '0': PYTHONPATH=/home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/bfmc_perception build --build-base /home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/build install --record /home/kyrgios/Documents/bfmc_ws/build/bfmc_perception/install.log --single-version-externally-managed install_data
+[2.196s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception' for CMake config files
+[2.196s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/lib'
+[2.196s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/bin'
+[2.196s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/lib/pkgconfig/bfmc_perception.pc'
+[2.196s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/lib/python3.10/site-packages'
+[2.196s] Level 1:colcon.colcon_core.shell:create_environment_hook('bfmc_perception', 'pythonpath')
+[2.197s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/share/bfmc_perception/hook/pythonpath.ps1'
+[2.197s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/share/bfmc_perception/hook/pythonpath.dsv'
+[2.197s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/share/bfmc_perception/hook/pythonpath.sh'
+[2.198s] Level 1:colcon.colcon_core.environment:checking '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/bin'
+[2.198s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(bfmc_perception)
+[2.198s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/share/bfmc_perception/package.ps1'
+[2.198s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/share/bfmc_perception/package.dsv'
+[2.199s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/share/bfmc_perception/package.sh'
+[2.199s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/share/bfmc_perception/package.bash'
+[2.199s] INFO:colcon.colcon_core.shell:Creating package script '/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/share/bfmc_perception/package.zsh'
+[2.199s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/kyrgios/Documents/bfmc_ws/install/bfmc_perception/share/colcon-core/packages/bfmc_perception)
+[2.200s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[2.200s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[2.200s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[2.200s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[2.204s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[2.204s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[2.204s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[2.215s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[2.216s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/kyrgios/Documents/bfmc_ws/install/local_setup.ps1'
+[2.216s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/kyrgios/Documents/bfmc_ws/install/_local_setup_util_ps1.py'
+[2.218s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/kyrgios/Documents/bfmc_ws/install/setup.ps1'
+[2.219s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/kyrgios/Documents/bfmc_ws/install/local_setup.sh'
+[2.219s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/kyrgios/Documents/bfmc_ws/install/_local_setup_util_sh.py'
+[2.220s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/kyrgios/Documents/bfmc_ws/install/setup.sh'
+[2.220s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/kyrgios/Documents/bfmc_ws/install/local_setup.bash'
+[2.221s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/kyrgios/Documents/bfmc_ws/install/setup.bash'
+[2.222s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/kyrgios/Documents/bfmc_ws/install/local_setup.zsh'
+[2.222s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/kyrgios/Documents/bfmc_ws/install/setup.zsh'

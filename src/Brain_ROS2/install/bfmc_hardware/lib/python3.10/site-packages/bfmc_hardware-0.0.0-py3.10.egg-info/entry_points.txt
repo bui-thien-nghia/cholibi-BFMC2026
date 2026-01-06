@@ -1,0 +1,4 @@
+[console_scripts]
+camera_node = bfmc_hardware.camera_node:main
+serial_node = bfmc_hardware.serial_node:main
+
