@@ -1,8 +1,0 @@
-{
-  "package_name": "bfmc_interfaces",
-  "non_idl_tuples": [
-    "/home/kyrgios/Documents/bfmc_ws/src/bfmc_interfaces:msg/Control.msg",
-    "/home/kyrgios/Documents/bfmc_ws/src/bfmc_interfaces:msg/LaneInfo.msg",
-    "/home/kyrgios/Documents/bfmc_ws/src/bfmc_interfaces:msg/SerialStatus.msg"
-  ]
-}

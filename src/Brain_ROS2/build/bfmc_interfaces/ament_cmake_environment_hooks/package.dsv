@@ -1,4 +1,0 @@
-source;share/bfmc_interfaces/local_setup.bash
-source;share/bfmc_interfaces/local_setup.dsv
-source;share/bfmc_interfaces/local_setup.sh
-source;share/bfmc_interfaces/local_setup.zsh

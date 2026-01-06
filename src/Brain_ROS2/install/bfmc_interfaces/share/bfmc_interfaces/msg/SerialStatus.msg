@@ -1,2 +1,0 @@
-bool connected
-string port_name
