@@ -1,0 +1,8 @@
+- 7/1/2026:
+    - lỗi cam, đ có bộ biên dịch codec ảnh -> tạo server local quăng hình lên theo fps
+    - lỗi crlf trong pyserial -> chuyển từ string thành byte
+    - tune lại thuật toán lane_detect lần 1 (tỷ)
+- 8/1/2026:
+    - quà từ thành phố: lỗi ép định dạng decimal, định dạng command feed cho serial
+    - tràn bộ nhớ nucleo, xử lý đ kịp so với fps, nucleo quá tải k nhận thêm cm serial
+    - vcdCalib: tự chế ra số ở phần thời gian
