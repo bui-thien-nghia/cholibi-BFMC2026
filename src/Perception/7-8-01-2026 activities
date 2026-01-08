@@ -1,5 +1,6 @@
 - 7/1/2026:
     - lỗi cam, đ có bộ biên dịch codec ảnh -> tạo server local quăng hình lên theo fps
+        lệnh public vid/images lên server: rpicam-vid -t 0 --width 640 --height 480 --codec mjpeg --framerate 30 --inline --listen -o tcp://0.0.0.0:5000
     - lỗi crlf trong pyserial -> chuyển từ string thành byte
     - tune lại thuật toán lane_detect lần 1 (tỷ)
 - 8/1/2026:
