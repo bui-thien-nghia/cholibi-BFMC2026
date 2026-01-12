@@ -61,7 +61,7 @@ class LaneDetector:
         
         # 3. Sobel X (Vertical line detection)
         gray = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
-        sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0) # x-derivative
+        sobelx = cv2.Sobel(gray, cv2.CV_8U, 1, 0) # cv2.CV_64F
         abs_sobelx = np.absolute(sobelx)
         scaled_sobel = np.uint8(255 * abs_sobelx / np.max(abs_sobelx))
         
