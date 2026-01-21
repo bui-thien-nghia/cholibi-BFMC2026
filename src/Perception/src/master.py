@@ -2,15 +2,16 @@ import cv2
 import numpy as np
 import os
 import glob
-from new_lane_detection import LaneDetector
-from new_lane_keeping import LaneController
+from lane_detection import LaneDetector
+from lane_keeping import LaneController
 import serial
 import traceback
 import time
+from picamera2 import Picamera2
 
 SERIAL_PORT = '/dev/ttyACM0'  
 BAUD_RATE   = 115200          
-CAMERA_ID   = 0
+CAMERA_ID   = -1
 # TEST_IMAGES_PATH = "test/test/*.jpg" 
 # SHOW_GUI = False       
 
@@ -81,6 +82,35 @@ CAMERA_ID   = 0
     # newwarp = cv2.warpPerspective(color_warp, lane_detector.Minv, (img.shape[1], img.shape[0])) 
     # return cv2.addWeighted(img, 1, newwarp, 0.3, 0)
 
+class Pi5Camera:
+    def __init__(self, width=640, height=480):
+        # Initialize the official Pi5 camera library
+        self.picam2 = Picamera2()
+        
+        # Configure it for BGR video (OpenCV standard)
+        config = self.picam2.create_video_configuration(
+            main={"size": (width, height), "format": "BGR888"}
+        )
+        self.picam2.configure(config)
+        
+        # Start the camera continuously
+        self.picam2.start()
+
+    def read(self):
+        # Grab the latest frame directly as a numpy array
+        try:
+            frame = self.picam2.capture_array()
+            if frame is None:
+                return False, None
+            return True, frame
+        except Exception as e:
+            print(f"Picamera2 Error: {e}")
+            return False, None
+
+    def release(self):
+        self.picam2.stop()
+        self.picam2.close()
+
 # --- MAIN LOOP ---
 def main():
     # --- 1. Multiprocessing Disabled for Image Test ---
@@ -115,10 +145,12 @@ def main():
 
     time.sleep(0.2)
 
-    cap = cv2.VideoCapture(CAMERA_ID)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640) 
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-    cap.set(cv2.CAP_PROP_FPS, 30)
+    # cap = cv2.VideoCapture(CAMERA_ID, cv2.CAP_V4L2)
+    # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640) 
+    # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    # cap.set(cv2.CAP_PROP_FPS, 30)
+
+    cap = Pi5Camera(width=640, height=480)
 
     detector = LaneDetector(img_w=640, img_h=480)
     controller = LaneController()
@@ -136,11 +168,14 @@ def main():
 
             # controller.prev_steer = 0.0
             steer, speed, state = controller.get_control(left_poly, right_poly)
+            steer = round(steer * 10)
+            speed = round(speed * 10)
 
             if 'ser' in locals() and ser.is_open:
-                ser.write(f"#vcdCalib:{speed:.2f};{steer:.2f};100;;\r\n".encode('utf-8'))
+                print(f"#vcdCalib:{speed};{steer};50;;\r\n")
+                ser.write(f"#vcdCalib:{speed};{steer};10;;\r\n".encode('utf-8'))
                 ser.flush()
-                time.sleep(0.05)
+                time.sleep(0.5)
 
     except KeyboardInterrupt:
         print("\nStopping...")
