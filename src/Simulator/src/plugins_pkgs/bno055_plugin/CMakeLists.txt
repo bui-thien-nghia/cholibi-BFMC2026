@@ -1,30 +1,16 @@
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 project(bno055_plugin)
 
-add_compile_options(-std=c++11)
+find_package(ament_cmake REQUIRED)
+find_package(gazebo_dev REQUIRED)
+find_package(gazebo_ros REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(utils REQUIRED)
 
-find_package(catkin REQUIRED COMPONENTS
-  gazebo_ros
-  roscpp
-  utils
-)
-
-find_package(gazebo REQUIRED)
-
-generate_messages(DEPENDENCIES)
-
-catkin_package(CATKIN_DEPENDS 
-  gazebo_ros
-  roscpp
-  utils
-)
-
-link_directories(${GAZEBO_LIBRARY_DIRS})
-
-include_directories(include ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS})
-
-list(APPEND CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
-
+link_directories(${gazebo_dev_LIBRARY_DIRS} ${GAZEBO_LIBRARY_DIRS})
+include_directories(include)
 add_library(bno055_plugin SHARED src/bno055_plugin.cpp include/bno055_plugin.hpp)
 
-target_link_libraries(bno055_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES})
+ament_target_dependencies(bno055_plugin "gazebo_dev" "gazebo_ros" "utils")
+ament_export_dependencies(gazebo_ros rclcpp utils)
+ament_package()

@@ -3,9 +3,10 @@
 #include <gazebo/common/Plugin.hh>
 #include <gazebo/common/common.hh>
 #include <gazebo/physics/physics.hh>
+#include <gazebo_ros/node.hpp>
 
-#include "ros/ros.h"
-#include "utils/IMU.h"
+#include "rclcpp/rclcpp.hpp"
+#include <utils/msg/imu.hpp>
 
 
 namespace gazebo
@@ -15,18 +16,11 @@ namespace gazebo
         class BNO055: public ModelPlugin
     	{
         private: 
-            physics::ModelPtr                   m_model;
-            ros::NodeHandlePtr		  nh;
-            ros::Timer				  timer;
-
-            /** ----------------------------------For ROS integration----------------------------------------------------**/
-            // A node use for ROS transport
-            std::unique_ptr<ros::NodeHandle>    m_ros_node;
-
-            // A ROS publisher
-            ros::Publisher                      m_pubBNO;
-            
-            utils::IMU                  m_bno055_pose;
+            physics::ModelPtr m_model;
+            rclcpp::TimerBase::SharedPtr timer;
+            rclcpp::Node::SharedPtr m_ros_node;
+            rclcpp::Publisher<utils::msg::IMU>::SharedPtr m_pubBNO;
+            utils::msg::IMU m_bno055_pose;
 
         // Default constructor
         public: BNO055();

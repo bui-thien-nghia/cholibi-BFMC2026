@@ -2,9 +2,10 @@
 #include <gazebo/common/Plugin.hh>
 #include <gazebo/common/common.hh>
 #include <gazebo/physics/physics.hh>
+#include <gazebo_ros/node.hpp>
 
-#include <ros/ros.h>
-#include <std_msgs/String.h>
+#include "rclcpp/rclcpp.hpp"
+#include <std_msgs/msg/string.hpp>
 
 #include "carlikerobot.hpp"
 #include "rapidjson/document.h"
@@ -27,9 +28,9 @@ namespace gazebo
         class CMessageHandler
         {
             public:
-                CMessageHandler(std::string, IRobotCommandSetter*);
+                CMessageHandler(rclcpp::Node::SharedPtr, IRobotCommandSetter*);
                 ~CMessageHandler();
-                void OnMsgCommand(std_msgs::String _msg);
+                void OnMsgCommand(const std_msgs::msg::String::SharedPtr _msg);
 
             private:
                 void unknownMessage();
@@ -37,12 +38,10 @@ namespace gazebo
                 void spedMessage(float _msg_val);
                 void sterMessage(float _msg_val);
                 
-                // private variable 
-                IRobotCommandSetter*                _robotSetter;
-
-                std::unique_ptr<ros::NodeHandle>    _rosNode;
-                ros::Subscriber                     _commandSubscriber;
-                ros::Publisher                      _feedbackPublisher;
+                IRobotCommandSetter* _robotSetter;
+                rclcpp::Node::SharedPtr _rosNode;
+                rclcpp::Subscription<std_msgs::msg::String>::SharedPtr _commandSubscriber;
+                rclcpp::Publisher<std_msgs::msg::String>::SharedPtr _feedbackPublisher;
 		
         };
         
