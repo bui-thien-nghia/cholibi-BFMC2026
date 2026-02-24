@@ -1,9 +1,14 @@
 *.pt
 *.yaml
-__pycache__/
+/__pycache__
 .vscode/
 images/
 dataset/
 runs/
 model/
 exp10-new/
+/lab_n_archives
+<<<<<<< Updated upstream
+=======
+w
+>>>>>>> Stashed changes

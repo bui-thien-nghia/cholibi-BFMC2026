@@ -4,8 +4,8 @@ import socket
 import struct
 import os
 import glob
-from lane_detection import LaneDetector
-from lane_keeping import LaneController
+from lane_detection_short import LaneDetector
+from lane_keeping_PID import LaneController
 import serial
 import traceback
 import time
@@ -129,3 +129,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

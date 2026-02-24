@@ -28,6 +28,21 @@
 
 from enum import Enum
 
+ALL_ON = {
+    "camera": {
+        "process": {"enabled": True,},
+        "thread": {"resolution": "1080p",}
+    },
+    "serial_handler": {
+        "process": {"enabled": True,}
+    },
+    "semaphore": {
+        "process": {"enabled": True,}
+    },
+    "traffic_com": {
+        "process": {"enabled": True,}
+    }
+}
 
 class SystemMode(Enum):
     """Enum defining the system modes."""
@@ -165,3 +180,23 @@ class SystemMode(Enum):
             }
         }
     }
+
+
+class SystemModeRebuilt(Enum):
+    LANE_KEEPING_NORMAL = ALL_ON
+    LANE_KEEPING_SLOW = ALL_ON
+    LANE_KEEPING_FAST = ALL_ON
+    STOP = ALL_ON
+    TURN = ALL_ON
+    OVERTAKING = ALL_ON
+    TAILING = ALL_ON
+    PARKING = ALL_ON
+
+    LANE_KEEPING_NORMAL['mode'] = 'lane_keeping_normal'
+    LANE_KEEPING_SLOW['mode'] = 'lane_keeping_slow'
+    LANE_KEEPING_FAST['mode'] = 'lane_keeping_fast'
+    STOP['mode'] = 'stop'
+    TURN['mode'] = 'normal'
+    OVERTAKING['mode'] = 'overtaking'
+    TAILING['mode'] = 'tailing'
+    PARKING['mode'] = 'parking'

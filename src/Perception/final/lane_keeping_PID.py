@@ -87,13 +87,13 @@ class LaneController:
             if np.rad2deg(steer_rad) > 5: state = "R" #right
             elif np.rad2deg(steer_rad) < -5: state = "L" #left
 
-            return np.rad2deg(steer_rad), target_speed, state
+            return np.rad2deg(steer_rad), target_speed, state, (gx, gy)
 
         except Exception as e:
             print(f"\n[MATH ERROR] Details: {e}")
             if target_poly: print(f"Poly Coeffs: {target_poly.coeffs}")
             print(f"Radius: {lookahead_radius}")
-            return np.rad2deg(self.prev_steer), self.min_speed, "MATH_ERR"
+            return np.rad2deg(self.prev_steer), self.min_speed, "MATH_ERR", None
 
     def _select_target_path(self, left_poly, right_poly):
         if left_poly is not None and right_poly is not None:
@@ -135,3 +135,4 @@ class LaneController:
         x = np.polyval(coeffs, y)
         
         return (x, y)
+
