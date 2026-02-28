@@ -45,7 +45,7 @@ class LaneDetector:
         self.M = cv2.getPerspectiveTransform(src, dst)
         self.Minv = cv2.getPerspectiveTransform(dst, src)
 
-   [ def preprocess(self, img):
+    def preprocess(self, img):
         # Combines Color (HLS) and Gradient (Sobel) thresholds.
         # Perspective Transform (IPM)
         warped = cv2.warpPerspective(img, self.M, (self.img_w, self.img_h))
@@ -53,7 +53,7 @@ class LaneDetector:
         # 2. Color Threshold 
         hls = cv2.cvtColor(warped, cv2.COLOR_BGR2HLS)
         s_channel = hls[:, :, 2]
-        l_channel = hls:, :, 1]
+        l_channel = hls[:, :, 1]
         
         # Filter for bright white
         s_binary = np.zeros_like(s_channel)
