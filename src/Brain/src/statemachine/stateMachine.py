@@ -31,7 +31,7 @@ import multiprocessing
 import os
 import atexit
 from typing import Dict
-from src.statemachine.systemMode import SystemMode
+from src.statemachine.systemMode import SystemMode, SystemModeRebuilt
 from src.statemachine.transitionTable import TransitionTable
 from src.utils.messages.messageHandlerSender import messageHandlerSender
 from src.utils.messages.allMessages import StateChange
