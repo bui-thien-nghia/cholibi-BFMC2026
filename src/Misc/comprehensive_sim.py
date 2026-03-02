@@ -24,9 +24,9 @@ except ImportError:
     HAS_MATPLOTLIB = False
     print("[WARNING] matplotlib not available")
 
-sys.path.insert(0, os.path.abspath('../../src/Computer/src/servers/trafficCommunicationServer/Useful'))
-sys.path.insert(0, os.path.abspath('../../src/Brain/src/statemachine'))
-sys.path.insert(0, os.path.abspath('../../src/Perception/final'))
+sys.path.insert(0, os.path.abspath('../Computer/src/servers/trafficCommunicationServer/Useful'))
+sys.path.insert(0, os.path.abspath('../Brain/src/statemachine'))
+sys.path.insert(0, os.path.abspath('../Perception/final'))
 
 try:
     import networkx as nx
@@ -174,27 +174,28 @@ class TrafficSign:
     def distance_to(self, x, y):
         return math.sqrt((self.x - x)**2 + (self.y - y)**2)
     
-    def draw(self, ax):
-        colors = {
-            'stop_sign': 'red', 'pedestrian_sign': 'yellow', 'parking_sign': 'green',
-            'enter_highway_sign': 'blue', 'roundabout_sign': 'orange',
-            'priority_sign': 'purple', 'oneway_sign': 'brown', 'notallowed_sign': 'black',
-            'leave_highway_sign': 'gray'
-        }
-        color = colors.get(self.sign_type, 'yellow')
+    # def draw(self, ax):
+    #     colors = {
+    #         'stop_sign': 'red', 'pedestrian_sign': 'yellow', 'parking_sign': 'green',
+    #         'enter_highway_sign': 'blue', 'roundabout_sign': 'orange',
+    #         'priority_sign': 'purple', 'oneway_sign': 'brown', 'notallowed_sign': 'black',
+    #         'leave_highway_sign': 'gray'
+    #     }
+    #     color = colors.get(self.sign_type, 'yellow')
         
-        if self.image:
-            try:
-                imagebox = OffsetImage(self.image, zoom=0.15, alpha=0.8)
-                ab = AnnotationBbox(imagebox, (self.x, self.y), frameon=False)
-                ax.add_artist(ab)
-            except Exception:
-                # Fallback to circle if image fails
-                circle = plt.Circle((self.x, self.y), self.radius, color=color, alpha=0.6)
-                ax.add_patch(circle)
-        else:
-            circle = plt.Circle((self.x, self.y), self.radius, color=color, alpha=0.6)
-            ax.add_patch(circle)
+    #     if self.image:
+    #         try:
+    #             # Zoom adjusted to match traffic light size (radius 0.2)
+    #             imagebox = OffsetImage(self.image, zoom=0.05, alpha=0.8)
+    #             ab = AnnotationBbox(imagebox, (self.x, self.y), frameon=False)
+    #             ax.add_artist(ab)
+    #         except Exception:
+    #             # Fallback to circle if image fails
+    #             circle = plt.Circle((self.x, self.y), self.radius, color=color, alpha=0.6)
+    #             ax.add_patch(circle)
+    #     else:
+    #         circle = plt.Circle((self.x, self.y), self.radius, color=color, alpha=0.6)
+    #         ax.add_patch(circle)
     
     def draw_and_return(self, ax):
         colors = {
@@ -207,7 +208,7 @@ class TrafficSign:
         
         if self.image:
             try:
-                imagebox = OffsetImage(self.image, zoom=0.15, alpha=0.8)
+                imagebox = OffsetImage(self.image, zoom=0.1, alpha=0.8)
                 ab = AnnotationBbox(imagebox, (self.x, self.y), frameon=False)
                 ax.add_artist(ab)
                 return ab
@@ -476,6 +477,14 @@ class ComprehensiveCarSimulator:
         self.mode_changer = StateChanger()
         self.current_mode = SystemModeRebuilt.LANE_KEEPING_NORMAL
         self.current_detections = []
+        self.lookup_nodes = []  # For turn recognition visualization
+        
+        # Bezier curve following for TURN mode
+        self.is_following_curve = False
+        self.curve_points = []  # Bezier curve waypoints
+        self.curve_progress = 0  # Current position along curve (0-1)
+        self.frozen_lookup_nodes = []  # Frozen nodes when entering TURN mode
+        self.turn_curve_start_edge = None  # Edge index where curve following should start (at node 1)
         
         self.scene_manager = scene_manager or SceneManager()
         self.fov = FieldOfView(width_near=0.5, width_far=0.8, length=1.5)
@@ -487,21 +496,27 @@ class ComprehensiveCarSimulator:
         print(f"[SUCCESS] Path planned: {len(self.path_nodes)} nodes")
     
     def _plan_path(self):
-        """Plan path to current segment endpoint"""
-        if self.waypoint_path is not None:
-            # Multi-path mode: get current segment endpoints
-            if self.segment_idx >= len(self.waypoint_path) - 1:
-                print(f"[INFO] All {len(self.waypoint_path)-1} segments completed")
-                return
-            segment_start = self.waypoint_path[self.segment_idx]
-            segment_end = self.waypoint_path[self.segment_idx + 1]
-            print(f"[INFO] Planning segment {self.segment_idx + 1}/{len(self.waypoint_path)-1}: {segment_start} -> {segment_end}")
-        else:
-            segment_start = self.start_node
-            segment_end = self.end_node
-        
+        """Plan merged path through all segments (if multi-path) or single path"""
         try:
-            self.path_nodes = nx.dijkstra_path(self.graph, segment_start, segment_end)
+            if self.waypoint_path is not None:
+                # Multi-path mode: merge all segments into one path
+                print(f"[INFO] Merging {len(self.waypoint_path)-1} segments into one path...")
+                merged_path_nodes = []
+                for i in range(len(self.waypoint_path) - 1):
+                    segment_start = self.waypoint_path[i]
+                    segment_end = self.waypoint_path[i + 1]
+                    segment_path = nx.dijkstra_path(self.graph, segment_start, segment_end)
+                    if i == 0:
+                        merged_path_nodes.extend(segment_path)
+                    else:
+                        merged_path_nodes.extend(segment_path[1:])  # Skip start node to avoid duplicate
+                    print(f"  Segment {i+1}: {segment_start} -> {segment_end} ({len(segment_path)} nodes)")
+                self.path_nodes = merged_path_nodes
+            else:
+                # Single path mode
+                self.path_nodes = nx.dijkstra_path(self.graph, self.start_node, self.end_node)
+                print(f"[INFO] Planning path: {self.start_node} -> {self.end_node}")
+            
             self.path_edges = list(zip(self.path_nodes[:-1], self.path_nodes[1:]))
             self.current_edge_idx = 0
             
@@ -512,8 +527,8 @@ class ComprehensiveCarSimulator:
                 self.waypoint_nodes.append((self.path_nodes[-1], len(self.path_nodes)-1))
             self.visited_waypoints = set()
             print(f"[SUCCESS] Path planned: {len(self.path_nodes)} nodes, {len(self.waypoint_nodes)} waypoints")
-        except nx.NetworkXNoPath:
-            print(f"[ERROR] No path from {segment_start} to {segment_end}")
+        except nx.NetworkXNoPath as e:
+            print(f"[ERROR] Path planning failed: {e}")
             raise
     
     def _get_current_edge_endpoints(self):
@@ -570,25 +585,13 @@ class ComprehensiveCarSimulator:
                 indices.append(13)  # intersection as priority_sign class (index 13) for normal lane keeping
                 boxes.append([0.5, 0.5, 0.3, 0.3])
         
-        old_mode = self.current_mode
+        # Record detections (state will be updated later)
         if indices:
-            # try:
-                self.mode_changer.record_detection(indices, boxes)
-                self.mode_changer.change_state()
-                new_mode = self.mode_changer._get_state()
-                if new_mode is not None:
-                    self.current_mode = new_mode
-                
-                # Always print detections when objects are found in FOV
-                if self.current_detections:
-                    det_str = ', '.join(self.current_detections[:3])
-                    mode_str = self.get_state()['mode'].upper()
-                    print(f"[DETECTION] {det_str:30s} → MODE: {mode_str}")
-            # except Exception as e:
-            #     print(f"[DEBUG] Detection error: {e}")
-            #     self.current_mode = SystemModeRebuilt.LANE_KEEPING_NORMAL
-        else:
-            self.current_mode = SystemModeRebuilt.LANE_KEEPING_NORMAL
+            self.mode_changer.record_detection(indices, boxes)
+            # Always print detections when objects are found in FOV
+            if self.current_detections:
+                det_str = ', '.join(self.current_detections[:3])
+                print(f"[DETECTION] {det_str:30s}")
         
         # NEW: Track waypoint visits
         if self.waypoint_nodes and self.current_waypoint_idx < len(self.waypoint_nodes):
@@ -599,26 +602,167 @@ class ComprehensiveCarSimulator:
                 self.current_waypoint_idx += 1
                 print(f"[WAYPOINT] {len(self.visited_waypoints)}/{len(self.waypoint_nodes)} reached")
     
+    def _calculate_turn_lookup(self):
+        """Calculate and send node degrees and yaw differences for turn recognition"""
+        try:
+            # Get current node and next 2 nodes (reduced from 4)
+            lookup_indices = []
+            lookup_nodes = []
+            
+            # Current node (destination of current edge - where car is heading)
+            if self.current_edge_idx < len(self.path_edges):
+                current_node = self.path_edges[self.current_edge_idx][1]
+                lookup_nodes.append(current_node)
+                lookup_indices.append(self.current_edge_idx)
+            
+            # Next 2 nodes (up to 2 forward)
+            for i in range(1, 3):
+                if self.current_edge_idx + i < len(self.path_edges):
+                    next_node = self.path_edges[self.current_edge_idx + i][1]
+                    lookup_nodes.append(next_node)
+                    lookup_indices.append(self.current_edge_idx + i)
+            
+            # Pad with current node if less than 3 nodes
+            while len(lookup_nodes) < 3:
+                lookup_nodes.append(lookup_nodes[-1])
+                lookup_indices.append(lookup_indices[-1])
+            
+            # Calculate node degrees (number of connections)
+            node_degrees = []
+            for node in lookup_nodes:
+                degree = len(list(self.graph.neighbors(node)))
+                node_degrees.append(degree)
+            
+            # Calculate absolute yaw differences (direction change between edges)
+            yaw_diffs = []
+            for idx in lookup_indices[:2]:  # Only 2 yaw differences (for 2 lookahead nodes)
+                if idx < len(self.path_edges) - 1:
+                    # Current edge
+                    curr_src, curr_dst = self.path_edges[idx]
+                    curr_x1 = float(self.graph.nodes[curr_src]['x'])
+                    curr_y1 = float(self.graph.nodes[curr_src]['y'])
+                    curr_x2 = float(self.graph.nodes[curr_dst]['x'])
+                    curr_y2 = float(self.graph.nodes[curr_dst]['y'])
+                    curr_yaw = math.atan2(curr_y2 - curr_y1, curr_x2 - curr_x1)
+                    
+                    # Next edge
+                    next_src, next_dst = self.path_edges[idx + 1]
+                    next_x1 = float(self.graph.nodes[next_src]['x'])
+                    next_y1 = float(self.graph.nodes[next_src]['y'])
+                    next_x2 = float(self.graph.nodes[next_dst]['x'])
+                    next_y2 = float(self.graph.nodes[next_dst]['y'])
+                    next_yaw = math.atan2(next_y2 - next_y1, next_x2 - next_x1)
+                    
+                    # Absolute yaw difference in degrees
+                    yaw_diff = abs(math.degrees(next_yaw - curr_yaw))
+                    # Normalize to 0-180
+                    if yaw_diff > 180:
+                        yaw_diff = 360 - yaw_diff
+                    yaw_diffs.append(yaw_diff)
+                else:
+                    yaw_diffs.append(0)
+            
+            # Send to mode_changer
+            self.mode_changer.record_lookup(node_degrees, yaw_diffs)
+            
+            # Store for visualization (current + 2 lookahead nodes)
+            self.lookup_nodes = lookup_nodes[:3]
+            
+        except Exception as e:
+            # Silently fail if lookup calculation fails
+            pass
+    
+    def _generate_bezier_curve(self, p0, p1, p2, num_points=50):
+        """Generate Bezier curve points from 3 control points (quadratic Bezier)"""
+        try:
+            curve_pts = []
+            for i in range(num_points + 1):
+                t = i / num_points
+                # Quadratic Bezier formula: B(t) = (1-t)²*P0 + 2*(1-t)*t*P1 + t²*P2
+                mt = 1 - t
+                x = mt*mt*p0[0] + 2*mt*t*p1[0] + t*t*p2[0]
+                y = mt*mt*p0[1] + 2*mt*t*p1[1] + t*t*p2[1]
+                curve_pts.append((x, y))
+            return curve_pts
+        except Exception as e:
+            print(f"[ERROR] Bezier curve generation failed: {e}")
+            return []
+    
+    def _get_point_on_curve(self, progress):
+        """Get position on curve based on progress (0-1)"""
+        if not self.curve_points or progress < 0 or progress > 1:
+            return None
+        idx = min(int(progress * len(self.curve_points)), len(self.curve_points) - 1)
+        return self.curve_points[idx]
+    
+    def _calculate_curve_length(self):
+        """Calculate total length of Bezier curve"""
+        if len(self.curve_points) < 2:
+            return 1.0
+        total_length = 0.0
+        for i in range(len(self.curve_points) - 1):
+            p1 = self.curve_points[i]
+            p2 = self.curve_points[i + 1]
+            dist = math.sqrt((p2[0] - p1[0])**2 + (p2[1] - p1[1])**2)
+            total_length += dist
+        return max(total_length, 0.1)  # Avoid division by zero
+    
+    def _update_state(self):
+        """Update state based on recorded detections and lookups"""
+        # Always call change_state to evaluate current detections
+        self.mode_changer.change_state()
+        new_mode = self.mode_changer._get_state()
+        if new_mode is not None:
+            self.current_mode = new_mode
+        else:
+            self.current_mode = SystemModeRebuilt.LANE_KEEPING_NORMAL
+        
+        # Handle TURN mode: freeze lookup and generate Bezier curve
+        mode_str = ''
+        if self.current_mode is not None and hasattr(self.current_mode, 'value'):
+            mode_str = self.current_mode.value.get('mode', '').lower()
+        
+        # Enter TURN mode: generate Bezier curve with current node + 2 lookahead nodes, start immediately
+        if mode_str == 'turn' and not self.is_following_curve:
+            self.frozen_lookup_nodes = self.lookup_nodes.copy()
+            if len(self.frozen_lookup_nodes) >= 3:  # Need current + 2 lookahead nodes
+                # Bezier control points: p0=current node, p1=lookahead node 1, p2=lookahead node 2
+                current_node = self.frozen_lookup_nodes[0]   # Current node
+                p1_node = self.frozen_lookup_nodes[1]        # Lookahead node 1
+                p2_node = self.frozen_lookup_nodes[2]        # Lookahead node 2
+                
+                try:
+                    # Get current car position as p0
+                    p0 = (self.x, self.y)
+                    p1 = (float(self.graph.nodes[p1_node]['x']), float(self.graph.nodes[p1_node]['y']))
+                    p2 = (float(self.graph.nodes[p2_node]['x']), float(self.graph.nodes[p2_node]['y']))
+                    
+                    self.curve_points = self._generate_bezier_curve(p0, p1, p2, num_points=100)
+                    # Start curve following immediately
+                    self.is_following_curve = True
+                    self.curve_progress = 0
+                    print(f"[TURN] Bezier curve generated with {len(self.curve_points)} points, starting immediately")
+                except Exception as e:
+                    print(f"[ERROR] Failed to generate Bezier curve: {e}")
+        
+        # Exit TURN mode
+        elif mode_str != 'turn' and self.is_following_curve:
+            self.is_following_curve = False
+            self.curve_points = []
+            self.curve_progress = 0
+            self.frozen_lookup_nodes = []
+            self.lookup_nodes = []
+            print(f"[TURN] Exited curve following mode")
+        
+        # Print mode change when detections exist
+        if self.current_detections:
+            mode_str_upper = self.get_state()['mode'].upper()
+            print(f"  → MODE: {mode_str_upper}")
+    
     def update(self): # LOW-LV CTRL
         """Update simulation by one timestep - timer always advances"""
         # Timer always advances, even when stopped
         self.current_time += self.dt
-        
-        # Check if current segment is complete and move to next
-        if self.waypoint_path is not None and self.current_edge_idx >= len(self.path_edges):
-            self.segment_idx += 1
-            if self.segment_idx < len(self.waypoint_path) - 1:
-                # Move to next segment
-                print(f"\n[SEGMENT COMPLETE] Moving to segment {self.segment_idx + 1}")
-                self._plan_path()
-                self.stop_reason = ""
-                self.stopped = False
-                return
-            else:
-                # All segments completed
-                self.stopped = True
-                self.stop_reason = "All segments completed"
-                return
         
         if self.current_edge_idx >= len(self.path_edges):
             self.stopped = True
@@ -627,16 +771,56 @@ class ComprehensiveCarSimulator:
         
         self._detect_objects()
         
+        # Only update lookup if not following a curve
+        if not self.is_following_curve:
+            self._calculate_turn_lookup()  # Calculate turn recognition data
+        
+        self._update_state()  # Update state based on detections and lookups
+        
         mode_str = ''
         if self.current_mode is not None and hasattr(self.current_mode, 'value'):
             mode_str = self.current_mode.value.get('mode', '').lower()
         
-        # Stop if mode is STOP or if stop_sign/red_light detected
-        if 'stop' in mode_str or 'stop_sign' in self.current_detections or 'red_light' in self.current_detections:
-            self.stop_reason = f"Detection: {', '.join(self.current_detections[:2]) if self.current_detections else 'stop_mode'}"
-            self.scene_manager.update(self.dt)
+        # Handle movement - either follow curve or normal path
+        if self.is_following_curve:
+            # === CURVE FOLLOWING LOGIC - Adjust here as needed ===
+            # Following Bezier curve from current node through 2 lookahead nodes
+            target_pos = self._get_point_on_curve(self.curve_progress)
+            if target_pos:
+                self.x, self.y = target_pos
+                # Progress increment: controls curve following speed
+                self.curve_progress += (self.speed * self.dt) / self._calculate_curve_length()
+                
+                # Check if reached end of curve
+                if self.curve_progress >= 1.0:
+                    self.is_following_curve = False
+                    self.curve_points = []
+                    self.frozen_lookup_nodes = []
+                    self.lookup_nodes = []
+                    self.curve_progress = 0
+                    # Skip 1 edge to position at next node after curve end
+                    self.current_edge_idx += 3
+                    self.position_on_edge = 0
+                    print(f"[TURN] Reached end of curve, resuming normal navigation at edge {self.current_edge_idx}")
+                
+                # Update yaw to face direction of curve
+                if self.curve_progress < 1.0:
+                    next_pos = self._get_point_on_curve(min(self.curve_progress + 0.01, 1.0))
+                    if next_pos:
+                        self.yaw = math.atan2(next_pos[1] - self.y, next_pos[0] - self.x)
+            
+            self.total_distance += self.speed * self.dt
             self.position_history.append((self.x, self.y))
+            self.scene_manager.update(self.dt)
             return
+        
+        # Normal path following
+        
+        # if 'stop' in mode_str or 'stop_sign' in self.current_detections or 'red_light' in self.current_detections:
+        #     self.stop_reason = f"Detection: {', '.join(self.current_detections[:2]) if self.current_detections else 'stop_mode'}"
+        #     self.scene_manager.update(self.dt)
+        #     self.position_history.append((self.x, self.y))
+        #     return
         
         start_pt, end_pt = self._get_current_edge_endpoints()
         if not (start_pt and end_pt):
@@ -1022,6 +1206,38 @@ class InteractiveVisualizer:
                     self.drawn_lines.append(line)
                     text = self.ax_main.text(wp_x + 0.15, wp_y + 0.15, str(wp_idx), fontsize=7, color='cyan', weight='bold', zorder=12)
                     self.drawn_texts.append(text)
+            except:
+                pass
+        
+        # Draw lookup nodes for turn recognition (circles matching waypoint style)
+        for i, lookup_node in enumerate(self.sim.lookup_nodes):
+            try:
+                node_x = float(self.graph.nodes[lookup_node]['x'])
+                node_y = float(self.graph.nodes[lookup_node]['y'])
+                
+                if i == 0:
+                    # Current node - darker red
+                    color = 'darkred'
+                    edge_color = 'darkred'
+                else:
+                    # Lookahead nodes - bright red
+                    color = 'red'
+                    edge_color = 'darkred'
+                
+                line, = self.ax_main.plot(node_x, node_y, marker='o', color=color, markersize=7, 
+                                         zorder=10, markeredgecolor=edge_color, markeredgewidth=0.5)
+                self.drawn_lines.append(line)
+            except:
+                pass
+        
+        # Draw Bezier curve if following
+        if self.sim.is_following_curve and self.sim.curve_points:
+            try:
+                curve_xs = [pt[0] for pt in self.sim.curve_points]
+                curve_ys = [pt[1] for pt in self.sim.curve_points]
+                line, = self.ax_main.plot(curve_xs, curve_ys, color='purple', linewidth=1.5, 
+                                         alpha=0.6, zorder=5, linestyle='--')
+                self.drawn_lines.append(line)
             except:
                 pass
         

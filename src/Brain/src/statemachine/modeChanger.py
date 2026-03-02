@@ -80,6 +80,9 @@ class StateChanger:
             'roundabout_sign',
             'stop_sign'
         ]}
+        self.lookup_nodes = []
+        self.lookup_yaw_diffs = []
+        self.cooldown = 0
 
     def record_detection(self, idxes, boxes):
         def get_max_cnt(cls, coeff=1):
@@ -111,12 +114,23 @@ class StateChanger:
             else:
                 self.cur_dets[c] -= 1 if self.cur_dets[c] > 0 else 0
 
+    def record_lookup(self, node_degrees, yaw_diffs):
+        self.lookup_node_degrees = node_degrees
+        self.lookup_yaw_diffs = yaw_diffs
+
     def change_state(self):
         '''Handles changes based on the detection recorder'''
         # threshold check util
         def threshold_met(cls):
             return self.cur_dets[cls] >= self.det_threshold[cls]
+
+        def turn_met(self):
+            return max(self.lookup_yaw_diffs) > 30
         
+        # if self._get_state() == SystemModeRebuilt.TURN and self.cooldown > 0:
+        #     self.cooldown -= 1
+        #     return
+
         # pedestrian handling
         if threshold_met('pedestrian') or threshold_met('cyclist'):
             self.cur_state = SystemModeRebuilt.STOP
@@ -143,7 +157,7 @@ class StateChanger:
         elif threshold_met('priority_sign'):
             self.cur_state = SystemModeRebuilt.LANE_KEEPING_NORMAL
         elif threshold_met('roundabout_sign'): # build a turn recognition based on route detection
-            self.cur_state = SystemModeRebuilt.LANE_KEEPING_NORMAL or SystemModeRebuilt.TURN
+            self.cur_state = SystemModeRebuilt.TURN if turn_met(self) else SystemModeRebuilt.LANE_KEEPING_NORMAL
         elif threshold_met('enter_highway_sign'):
             self.cur_state = SystemModeRebuilt.LANE_KEEPING_FAST
         elif threshold_met('leave_highway_sign') and self._get_state() == SystemModeRebuilt.LANE_KEEPING_FAST:
@@ -152,14 +166,18 @@ class StateChanger:
             self.cur_state = SystemModeRebuilt.PARKING
 
         # No detection (except for some that needs retaining states)
+        elif turn_met(self):
+            self.cur_state = SystemModeRebuilt.TURN
+            # self.cooldown = 3
         elif self._get_state() not in [SystemModeRebuilt.LANE_KEEPING_FAST, SystemModeRebuilt.LANE_KEEPING_NORMAL,
-                                       SystemModeRebuilt.OVERTAKING, SystemModeRebuilt.TAILING, SystemModeRebuilt.TURN,
-                                       SystemModeRebuilt.PARKING]:
+                                       SystemModeRebuilt.OVERTAKING, SystemModeRebuilt.TAILING, SystemModeRebuilt.PARKING]:
             self.cur_state = SystemModeRebuilt.LANE_KEEPING_NORMAL
 
     def _get_state(self):
         return self.cur_state
     
+    def _get_cooldown(self):
+        return self.cooldown
 
 # EXAMPLE AS BELOW
 # if __name__ == '__main__':2
