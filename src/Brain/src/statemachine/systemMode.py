@@ -182,9 +182,9 @@ class SystemMode(Enum):
     }
 
 
-class SystemModeRebuilt(Enum):
-    LANE_KEEPING_NORMAL = {
-        "mode": "lane_keeping_normal",
+class CarMode(Enum):
+    STRAIGHT = {
+        "mode": "straight",
         "camera": {
             "process": {"enabled": True,},
             "thread": {"resolution": "1080p",}
@@ -197,54 +197,6 @@ class SystemModeRebuilt(Enum):
         },
         "traffic_com": {
             "process": {"enabled": True,}
-        }
-    }
-    LANE_KEEPING_SLOW = {
-        "mode": "lane_keeping_slow",
-        "camera": {
-            "process": {"enabled": True,},
-            "thread": {"resolution": "1080p",}
-        },
-        "serial_handler": {
-            "process": {"enabled": True,}
-        },
-        "semaphore": {
-            "process": {"enabled": True,}
-        },
-        "traffic_com": {
-            "process": {"enabled": True,}
-        }
-    }
-    LANE_KEEPING_FAST = {
-        "mode": "lane_keeping_fast",
-        "camera": {
-            "process": {"enabled": True,},
-            "thread": {"resolution": "1080p",}
-        },
-        "serial_handler": {
-            "process": {"enabled": True,}
-        },
-        "semaphore": {
-            "process": {"enabled": True,}
-        },
-        "traffic_com": {
-            "process": {"enabled": True,}
-        }
-    }
-    STOP = {
-        "mode": "stop",
-        "camera": {
-            "process": {"enabled": False,},
-            "thread": {"resolution": "240p",}
-        },
-        "serial_handler": {
-            "process": {"enabled": True,}
-        },
-        "semaphore": {
-            "process": {"enabled": False,}
-        },
-        "traffic_com": {
-            "process": {"enabled": False,}
         }
     }
     TURN = {
@@ -312,4 +264,8 @@ class SystemModeRebuilt(Enum):
         }
     }
 
-print(SystemModeRebuilt.OVERTAKING.value['mode'])
+class CarSpeed(Enum): # cm/s
+    STOP = 0
+    SLOW = 20
+    NORMAL = 30
+    FAST = 50

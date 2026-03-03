@@ -1,8 +1,16 @@
-from systemMode import SystemModeRebuilt
+from systemMode import CarMode, CarSpeed
+import time
 
 class StateChanger:
     def __init__(self):
-        self.cur_state = SystemModeRebuilt.LANE_KEEPING_NORMAL
+        self.cur_mode = CarMode.STRAIGHT
+        self.cur_speed = CarSpeed.NORMAL
+
+        self.stop_halt = False
+        self.timer = 0.0  # Elapsed time since creation, ends at termination
+        self.time_checkpoint = 0.0 # Moment of important events, shared with all occurences in modeChanger
+
+        self.lookup_yaw_diffs = []
         self.classes = [
             'pedestrian',
             'cyclist',
@@ -80,9 +88,6 @@ class StateChanger:
             'roundabout_sign',
             'stop_sign'
         ]}
-        self.lookup_nodes = []
-        self.lookup_yaw_diffs = []
-        self.cooldown = 0
 
     def record_detection(self, idxes, boxes):
         def get_max_cnt(cls, coeff=1):
@@ -106,17 +111,18 @@ class StateChanger:
                     accepted_dets.append(d)
                 elif significant_sign(b, 1/1, 0.9, 0.006):
                     accepted_dets.append(d)
-        
-        print(f'Accepted Detections: {accepted_dets}')
+
         for c in list(self.cur_dets.keys()):
             if c in accepted_dets:
                 self.cur_dets[c] += 1 if self.cur_dets[c] < get_max_cnt(c, 2) else 0
             else:
                 self.cur_dets[c] -= 1 if self.cur_dets[c] > 0 else 0
 
-    def record_lookup(self, node_degrees, yaw_diffs):
-        self.lookup_node_degrees = node_degrees
+    def record_lookup(self, yaw_diffs):
         self.lookup_yaw_diffs = yaw_diffs
+    
+    def update_timer(self, dt):
+        self.timer += dt
 
     def change_state(self):
         '''Handles changes based on the detection recorder'''
@@ -125,59 +131,84 @@ class StateChanger:
             return self.cur_dets[cls] >= self.det_threshold[cls]
 
         def turn_met(self):
+            if len(self.lookup_yaw_diffs) == 0:
+                return False
             return max(self.lookup_yaw_diffs) > 30
+
+        # speed handling: stop (stop_sign) > stop (others) > slow > normal > fast, priority based
+        if self.stop_halt:
+            if self.timer < self.time_checkpoint + 1.0: # set back to 3.0 irl
+                self.cur_speed = CarSpeed.STOP
+            elif self.time_checkpoint + 1.0 <= self.timer < self.time_checkpoint + 1.5: # set back to 3.0 irl
+                self.cur_speed = CarSpeed.NORMAL
+            else:
+                self.stop_halt = False
+                self.cur_dets['stop_sign'] = 0
+                self.cur_speed = CarSpeed.NORMAL
+            return
         
-        # if self._get_state() == SystemModeRebuilt.TURN and self.cooldown > 0:
-        #     self.cooldown -= 1
-        #     return
-
-        # pedestrian handling
         if threshold_met('pedestrian') or threshold_met('cyclist'):
-            self.cur_state = SystemModeRebuilt.STOP
-        elif threshold_met('car') or threshold_met('truck') or threshold_met('bus'): # build a decisor based on movement/distance tracking
-            self.cur_state = SystemModeRebuilt.OVERTAKING or SystemModeRebuilt.TAILING
-
-        # traffic light handling
+            self.cur_speed = CarSpeed.STOP
         elif threshold_met('red_light'):
-            self.cur_state = SystemModeRebuilt.STOP
-        elif threshold_met('yellow_light') and self._get_state() != SystemModeRebuilt.STOP:
-            self.cur_state = SystemModeRebuilt.LANE_KEEPING_SLOW
-        elif threshold_met('green_light'):
-            self.cur_state = SystemModeRebuilt.LANE_KEEPING_NORMAL
-
-        # traffic sign handling
-        elif threshold_met('stop_sign'):
-            self.cur_state = SystemModeRebuilt.STOP
+            self.cur_speed = CarSpeed.STOP
+        elif threshold_met('stop_sign') and not self.stop_halt: # Define thresholds and cooldowns here
+            self.cur_speed = CarSpeed.STOP
+            self.stop_halt = True
+            self.time_checkpoint = self.timer
         elif threshold_met('noentry_sign'): # add intersection detection here
-            self.cur_state = SystemModeRebuilt.STOP
+            self.cur_speed = CarSpeed.STOP
+        elif threshold_met('car') or threshold_met('truck') or threshold_met('bus'):
+            self.cur_speed = CarSpeed.STOP if self._get_mode() == CarMode.TURN else CarSpeed.NORMAL
+        elif threshold_met('yellow_light') and self._get_speed() != CarSpeed.STOP:
+            self.cur_speed = CarSpeed.SLOW
         elif threshold_met('crosswalk_sign'):
-            self.cur_state = SystemModeRebuilt.LANE_KEEPING_SLOW
+            self.cur_speed = CarSpeed.SLOW
+        elif threshold_met('green_light'):
+            self.cur_speed = CarSpeed.NORMAL
         elif threshold_met('oneway_sign'): # consider adding a strict go forward only OR construct for this case
-            self.cur_state = SystemModeRebuilt.LANE_KEEPING_NORMAL
+            self.cur_speed = CarSpeed.NORMAL
         elif threshold_met('priority_sign'):
-            self.cur_state = SystemModeRebuilt.LANE_KEEPING_NORMAL
-        elif threshold_met('roundabout_sign'): # build a turn recognition based on route detection
-            self.cur_state = SystemModeRebuilt.TURN if turn_met(self) else SystemModeRebuilt.LANE_KEEPING_NORMAL
+            self.cur_speed = CarSpeed.NORMAL
+        elif threshold_met('leave_highway_sign') and self._get_speed() == CarSpeed.FAST:
+            self.cur_speed = CarSpeed.NORMAL
         elif threshold_met('enter_highway_sign'):
-            self.cur_state = SystemModeRebuilt.LANE_KEEPING_FAST
-        elif threshold_met('leave_highway_sign') and self._get_state() == SystemModeRebuilt.LANE_KEEPING_FAST:
-            self.cur_state = SystemModeRebuilt.LANE_KEEPING_NORMAL
+            self.cur_speed = CarSpeed.FAST
+        else:
+            self.cur_speed = CarSpeed.NORMAL if self._get_speed() != CarSpeed.STOP else CarSpeed.STOP
+
+        # mode handling: frequency based
+        if threshold_met('oneway_sign'):
+            self.cur_mode = CarMode.STRAIGHT
+        if turn_met(self) or threshold_met('roundabout_sign'):
+            self.cur_mode = CarMode.TURN
+        elif threshold_met('car') or threshold_met('truck') or threshold_met('bus'):
+            self.cur_mode = CarMode.TAILING if self._get_speed() == CarSpeed.SLOW else CarMode.OVERTAKING
         elif threshold_met('parking_sign'):
-            self.cur_state = SystemModeRebuilt.PARKING
+            self.cur_mode = CarMode.PARKING    
+        else:
+            self.cur_mode = CarMode.STRAIGHT
 
-        # No detection (except for some that needs retaining states)
-        elif turn_met(self):
-            self.cur_state = SystemModeRebuilt.TURN
-            # self.cooldown = 3
-        elif self._get_state() not in [SystemModeRebuilt.LANE_KEEPING_FAST, SystemModeRebuilt.LANE_KEEPING_NORMAL,
-                                       SystemModeRebuilt.OVERTAKING, SystemModeRebuilt.TAILING, SystemModeRebuilt.PARKING]:
-            self.cur_state = SystemModeRebuilt.LANE_KEEPING_NORMAL
+        
+        # traffic sign handling
+        if threshold_met('stop_sign'):
+            if not self.stop_halt:
+                self.stop_halt = True
+                self.time_checkpoint = self.timer
+                self.buffer_state = self._get_state()
+                self.cur_state = CarMode.STOP
+            else:
+                if self.timer >= self.time_checkpoint + 1.0: # set back to 3.0 irl
+                    if self.buffer_state:
+                        self.cur_state = self.buffer_state
+                        self.buffer_state = None
+                    self.cur_dets['stop_sign'] -= 1
+                    self.stop_halt = False if self.cur_dets['stop_sign'] == 0 else True
 
-    def _get_state(self):
-        return self.cur_state
-    
-    def _get_cooldown(self):
-        return self.cooldown
+    def _get_mode(self):
+        return self.cur_mode
+
+    def _get_speed(self):
+        return self.cur_speed
 
 # EXAMPLE AS BELOW
 # if __name__ == '__main__':2
