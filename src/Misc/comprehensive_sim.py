@@ -648,6 +648,7 @@ class ComprehensiveCarSimulator:
                 except Exception as e:
                     pass
 
+        # !!! WORK IN PROGRESS AREA !!!
         # Enter OVERTAKING mode: generate Bezier curve
         elif self.current_mode and self.current_mode.value.get('mode') == 'overtaking' and not self.is_following_curve:
             # look for nearest anchor node (not on current path)
@@ -701,6 +702,7 @@ class ComprehensiveCarSimulator:
             self.is_following_curve = False
             self.curve_points = []
             self.curve_progress = 0
+        # !!! END OF WORK IN PROGRESS AREA!!!
         
         if self.current_detections:
             print(f"  → MODE: {self.current_mode.value.get('mode', 'unknown').upper()}")
