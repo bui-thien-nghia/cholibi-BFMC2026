@@ -7,10 +7,17 @@ class StateChanger:
         self.cur_speed = CarSpeed.NORMAL
 
         self.stop_halt = False
+        self.special_mode = None
         self.timer = 0.0  # Elapsed time since creation, ends at termination
         self.time_checkpoint = 0.0 # Moment of important events, shared with all occurences in modeChanger
 
         self.lookup_yaw_diffs = []
+        self.switches = {
+            'stop_halt': False,
+            'overtaking_possible': True,
+            'parking': False,
+            'in_special_mode': False
+        }
         self.classes = [
             'pedestrian',
             'cyclist',
@@ -107,7 +114,7 @@ class StateChanger:
             elif d in self.classes[5:7] and significant_sign(b, 1/3.5, 0.9, 0.002):
                 accepted_dets.append(d)
             elif d in self.classes[7:]:
-                if d in ['enter_highway_sign', 'leave_highway_sign'] and significant_sign(b, 2/3, 0.9, 0.002):
+                if d in ['enter_highway_sign', 'leave_highway_sign'] and significant_sign(b, 2.5/3, 0.9, 0.002):
                     accepted_dets.append(d)
                 elif significant_sign(b, 1/1, 0.9, 0.006):
                     accepted_dets.append(d)
@@ -163,9 +170,11 @@ class StateChanger:
             self.cur_speed = CarSpeed.SLOW
         elif threshold_met('crosswalk_sign'):
             self.cur_speed = CarSpeed.SLOW
+        elif turn_met(self) or threshold_met('roundabout_sign'):
+            self.cur_speed = CarSpeed.SLOW
         elif threshold_met('green_light'):
             self.cur_speed = CarSpeed.NORMAL
-        elif threshold_met('oneway_sign'): # consider adding a strict go forward only OR construct for this case
+        elif threshold_met('oneway_sign'):
             self.cur_speed = CarSpeed.NORMAL
         elif threshold_met('priority_sign'):
             self.cur_speed = CarSpeed.NORMAL
@@ -176,39 +185,38 @@ class StateChanger:
         else:
             self.cur_speed = CarSpeed.NORMAL if self._get_speed() != CarSpeed.STOP else CarSpeed.STOP
 
-        # mode handling: frequency based
-        if threshold_met('oneway_sign'):
+        if self._get_switch('in_special_mode'): # Skip mode changing when performing a task
+            pass
+        elif threshold_met('oneway_sign'):
             self.cur_mode = CarMode.STRAIGHT
-        if turn_met(self) or threshold_met('roundabout_sign'):
+            self._update_switch('in_special_mode', False)
+        elif turn_met(self) or threshold_met('roundabout_sign'):
             self.cur_mode = CarMode.TURN
+            self._update_switch('in_special_mode', False)
         elif threshold_met('car') or threshold_met('truck') or threshold_met('bus'):
-            self.cur_mode = CarMode.TAILING if self._get_speed() == CarSpeed.SLOW else CarMode.OVERTAKING
+            self.cur_mode = CarMode.OVERTAKING if self._get_switch('overtaking_possible') else CarMode.TAILING
+            self._update_switch('in_special_mode', True)
         elif threshold_met('parking_sign'):
-            self.cur_mode = CarMode.PARKING    
+            self.cur_mode = CarMode.PARKING
+            self._update_switch('in_special_mode', True)
         else:
             self.cur_mode = CarMode.STRAIGHT
-
-        
-        # traffic sign handling
-        if threshold_met('stop_sign'):
-            if not self.stop_halt:
-                self.stop_halt = True
-                self.time_checkpoint = self.timer
-                self.buffer_state = self._get_state()
-                self.cur_state = CarMode.STOP
-            else:
-                if self.timer >= self.time_checkpoint + 1.0: # set back to 3.0 irl
-                    if self.buffer_state:
-                        self.cur_state = self.buffer_state
-                        self.buffer_state = None
-                    self.cur_dets['stop_sign'] -= 1
-                    self.stop_halt = False if self.cur_dets['stop_sign'] == 0 else True
+            self._update_switch('in_special_mode', False)
 
     def _get_mode(self):
         return self.cur_mode
 
     def _get_speed(self):
         return self.cur_speed
+
+    def _get_switch(self, switch):
+        return self.switches.get(switch, False)
+    
+    def _update_switch(self, switch, value):
+        try:
+            self.switches[switch] = value
+        except Exception as e:
+            print(f'Error: {e}')
 
 # EXAMPLE AS BELOW
 # if __name__ == '__main__':2

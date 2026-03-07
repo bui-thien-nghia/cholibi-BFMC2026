@@ -42,7 +42,7 @@ class LaneController:
             if self.no_lane_counter < self.PATIENCE_LIMIT:
                 return np.rad2deg(self.prev_steer), self.min_speed, "F" #free
             else:
-                return 0.0, 0.0, "N" #No_lane
+                return 0.0, 0.0, 0.0, "N" #No_lane
         
         self.no_lane_counter = 0 
 
