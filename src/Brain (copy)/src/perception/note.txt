@@ -1,0 +1,10 @@
+===QUESTIONS===
+1. is threadVIO a replacement of LaneController and also a route planner?
+2. How do I update the VIO given my changes in master.py?
+3. Can I move other unrelated files in Brain (copy) into Misc?
+4. the landmark detector seems to be built almost the same as the object detector in Perception. Which to keep?
+5. I suggest re-managing flow like this: localizer + obj detor -> state changer -> state handler -> (planner) -> repeat
+
+===TASKS===
+1. Convert other things (modechanger, det model, road planner) to threads, working under one perception process
+2. Integrate neew threads and master.py's implementation into main.py in Brain (copy)

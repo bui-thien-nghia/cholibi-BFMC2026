@@ -1,10 +1,23 @@
 from ultralytics import YOLO
 
 class ObjectDetector:
-    def __init__(self, path_to_model):
-        self.model = YOLO(path_to_model)
+    def __init__(self, model_path):
+        self.model = YOLO(model_path)
+
+        # Configurations:
+        self.imgsz = 416
+        self.half = True
+        self.conf = 0.75
+
 
     def detect(self, img):
-        self.model.predict(
-            
+        '''Returns a list of objects' classes and normalized coords on image'''
+        result = self.model.predict(
+            source=img,
+            half=self.half,
+            imgsz=self.imgsz,
+            conf=self.conf,
+            verbose=False
         )
+        
+        return result.boxes.cls.tolist(), result.boxes.xywhn.tolist()

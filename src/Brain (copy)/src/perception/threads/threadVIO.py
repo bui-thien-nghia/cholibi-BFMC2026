@@ -35,15 +35,16 @@ import math
 from picamera2 import Picamera2
 
 from src.templates.threadwithstop import ThreadWithStop
+from src.utils.messages.allMessages import ImuData, VCDCalib, Odometry, NavGoal
+from src.utils.messages.messageHandlerSubscriber import messageHandlerSubscriber
+from src.utils.messages.messageHandlerSender import messageHandlerSender
+from src.perception.utils.map_handler import MapHandler
+
 from src.perception.lane_detection_short import LaneDetector
 from src.perception.lane_keeping_PID import LaneController
 from src.perception.utils.visual_odometry import VisualOdometry2D
 from src.perception.utils.landmark_detector import LandmarkDetector
 from src.perception.utils.ekf_fusion import EKF_Fusion
-from src.perception.utils.map_handler import MapHandler
-from src.utils.messages.allMessages import ImuData, VCDCalib, Odometry, NavGoal
-from src.utils.messages.messageHandlerSubscriber import messageHandlerSubscriber
-from src.utils.messages.messageHandlerSender import messageHandlerSender
 
 class threadVIO(ThreadWithStop):
     """This thread handles the Visual Inertial Odometry and Map Navigation logic.\n
