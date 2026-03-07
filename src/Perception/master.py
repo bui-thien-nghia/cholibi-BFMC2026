@@ -1,5 +1,6 @@
 import cv2
 import socket
+import os
 import sys
 import argparse
 import serial
@@ -7,26 +8,29 @@ import traceback
 import time
 
 # !CHANGE THIS AFTER FINISHING
-sys.path.insert('../obj_det/')
-sys.path.insert('../../Brain (copy)/src/statemachine')
+sys.path.insert(0, os.path.abspath('./obj_det/'))
+sys.path.insert(0, os.path.abspath('./lane_keep/'))
+sys.path.insert(0, os.path.abspath('./mode_changer/'))
 
 from camera import Pi5Camera
 from live_debugger import LaneVisualizer
 from lane_keeping_PID import LaneController
 from lane_detection_short import LaneDetector
-from object_detection import ObjectDetector
+from obj_detection import ObjectDetector
 from carMode import CarModeChanger
 
-SERIAL_PORT = '/dev/ttyACM0'  
-BAUD_RATE   = 115200          
+SERIAL_PORT = '/dev/ttyACM0'
+BAUD_RATE   = 115200
 CAMERA_ID   = -1
-LAPTOP_IP = '192.168.50.1'
+# LAPTOP_IP = '192.168.50.1'
+LAPTOP_IP = '0.0.0.0'
 LAPTOP_PORT = 9999
-MODEL_PATH = '../obj_det/model/obj.onnx'
+MODEL_PATH = './obj_det/model/obj.onnx'
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add('debug', type=bool, default=False, help="Toggle on/off the debug mode for detection visualization")
+    parser.add_argument('--debug', type=bool, default=False, help="Toggle on/off the debug mode for detection visualization")
+    args = parser.parse_args()
 
     try:
         ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=0.5)
@@ -49,15 +53,20 @@ def main():
     time.sleep(0.2)
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    print(client_socket.getsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF))
+    client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 1000000) # Set max sending bytes to 1000000 bytes
     current_speed = 0
     prev_time = time.time()
 
-    cap = Pi5Camera(width=640, height=480)
-    visualizer = LaneVisualizer(img_w=640, img_h=480)
-    lane_detector = LaneDetector(img_w=640, img_h=480)
+    cap = Pi5Camera(width=1920, height=1080)
+    visualizer = LaneVisualizer(img_w=1920, img_h=1080)
+    lane_detector = LaneDetector(img_w=1920, img_h=1080)
     controller = LaneController()
     obj_detector = ObjectDetector(model_path=MODEL_PATH)
     mode_changer = CarModeChanger() 
+    
+    if args.debug:
+        print(f'Streaming debug data on port {LAPTOP_PORT}')
 
     try:
         while True:
@@ -92,12 +101,13 @@ def main():
 
             if 'ser' in locals() and ser.is_open:
                 if time.time() - prev_time > 0.25:
-                    print(f"#vcdCalib:{speed};{steer};3;;\r\n")
-                    ser.write(f"#vcdCalib:{speed};{steer};3;;\r\n".encode('utf-8'))
+                    print(f"#vcdCalib:{speed};{steer};5;;\r\n")
+                    print(f"total process time per iter: {time.time() - prev_time}s")
+                    ser.write(f"#vcdCalib:{speed};{steer};5;;\r\n".encode('utf-8'))
                     prev_time = time.time()
             
             # Debug
-            if parser.debug:
+            if 1:
                 debug_frame = visualizer.draw_debug_frame(binary_warped, left_poly, right_poly, target_point, steer, speed)
 
                 _, encoded_img = cv2.imencode('.jpg', debug_frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
@@ -106,7 +116,7 @@ def main():
                     data = encoded_img.tobytes()
                     client_socket.sendto(b'IMG' + data, (LAPTOP_IP, LAPTOP_PORT))
                 except Exception as e:
-                    print(f'error streaming: {e}')
+                    print(f'error streaming: {e}, data length is {len(data)}')
 
     except KeyboardInterrupt:
         print("\nStopping...")

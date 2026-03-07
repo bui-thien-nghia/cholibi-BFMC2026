@@ -1,4 +1,6 @@
+from ultralytics import YOLO
 from picamera2 import Picamera2
+import cv2
 
 class Pi5Camera:
     def __init__(self, width=640, height=480):
@@ -28,3 +30,27 @@ class Pi5Camera:
     def release(self):
         self.picam2.stop()
         self.picam2.close()
+        
+def main():
+    cam = Pi5Camera()
+    model = YOLO('./obj_det/model/obj.onnx')
+    while True:
+        ret, frame = cam.read()
+        if not ret:
+            continue
+        r = model.predict(
+            frame,
+            half=True,
+            imgsz=320,
+            conf=0.7,
+            verbose=False
+        )[0]
+        img = r.plot()
+        cv2.imshow('check', img)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            cam.release()
+            cap.destroyAllWindows()
+            return
+        
+if __name__ == '__main__':
+    main()

@@ -14,17 +14,17 @@ class LaneDetector:
         self.ym_per_pix = ym_per_pix
         
         src = np.float32([
-            [img_w * 0.2, img_h * 0.30],  # Top Left (Narrower)
-            [img_w * 0.8, img_h * 0.30],  # Top Right
+            [img_w * 0.27, img_h * 0.30],  # Top Left (Narrower)
+            [img_w * 0.75, img_h * 0.30],  # Top Right
             [img_w * 1, img_h * 0.63],  # Bot Right (Wider)
             [img_w * 0, img_h * 0.63]   # Bot Left
         ])
         
         dst = np.float32([
-            [img_w * 0.2, 0],
-            [img_w * 0.8, 0],
-            [img_w * 0.8, img_h],
-            [img_w * 0.2, img_h]
+            [img_w * 0, 0],
+            [img_w * 1, 0],
+            [img_w * 1, img_h],
+            [img_w * 0, img_h]
         ])
 
         # src = np.float32([
@@ -57,16 +57,16 @@ class LaneDetector:
         
         # Filter for bright white
         s_binary = np.zeros_like(s_channel)
-        s_binary[(s_channel > 100) & (l_channel > 150)] = 1 
+        s_binary[(s_channel > 0) & (l_channel > 189)] = 1 
         
         # 3. Sobel X (Vertical line detection)
-        gray = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
-        sobelx = cv2.Sobel(gray, cv2.CV_8U, 1, 0) # cv2.CV_64F
+       # gray = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
+        sobelx = cv2.Sobel(l_channel, cv2.CV_64F, 1, 0) # cv2.CV_64F
         abs_sobelx = np.absolute(sobelx)
         scaled_sobel = np.uint8(255 * abs_sobelx / np.max(abs_sobelx))
         
         sxbinary = np.zeros_like(scaled_sobel)
-        sxbinary[(scaled_sobel > 35) & (scaled_sobel < 100)] = 1
+        sxbinary[(scaled_sobel > 78) & (scaled_sobel < 255)] = 1
         
         # 4. Combine
         combined_binary = np.zeros_like(sxbinary)
