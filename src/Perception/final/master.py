@@ -70,7 +70,7 @@ def main():
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    visualizer = LaneVisualizer(img_w = 640, img_h = 480)
+    visualizer = LaneVisualizer(img_w=640, img_h=480)
 
     cap = Pi5Camera(width=640, height=480)
 
