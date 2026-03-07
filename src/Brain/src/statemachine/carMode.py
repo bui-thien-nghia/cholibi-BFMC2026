@@ -1,7 +1,95 @@
-from systemMode import CarMode, CarSpeed
+from enum import Enum
 import time
 
-class StateChanger:
+class CarMode(Enum):
+    STRAIGHT = {
+        "mode": "straight",
+        "camera": {
+            "process": {"enabled": True,},
+            "thread": {"resolution": "1080p",}
+        },
+        "serial_handler": {
+            "process": {"enabled": True,}
+        },
+        "semaphore": {
+            "process": {"enabled": True,}
+        },
+        "traffic_com": {
+            "process": {"enabled": True,}
+        }
+    }
+    TURN = {
+        "mode": "turn",
+        "camera": {
+            "process": {"enabled": True,},
+            "thread": {"resolution": "1080p",}
+        },
+        "serial_handler": {
+            "process": {"enabled": True,}
+        },
+        "semaphore": {
+            "process": {"enabled": False,}
+        },
+        "traffic_com": {
+            "process": {"enabled": False,}
+        }
+    }
+    OVERTAKING = {
+        "mode": "overtaking",
+        "camera": {
+            "process": {"enabled": True,},
+            "thread": {"resolution": "1080p",}
+        },
+        "serial_handler": {
+            "process": {"enabled": True,}
+        },
+        "semaphore": {
+            "process": {"enabled": False,}
+        },
+        "traffic_com": {
+            "process": {"enabled": False,}
+        }
+    }
+    TAILING = {
+        "mode": "tailing",
+        "camera": {
+            "process": {"enabled": True,},
+            "thread": {"resolution": "1080p",}
+        },
+        "serial_handler": {
+            "process": {"enabled": True,}
+        },
+        "semaphore": {
+            "process": {"enabled": False,}
+        },
+        "traffic_com": {
+            "process": {"enabled": False,}
+        }
+    }
+    PARKING = {
+        "mode": "parking",
+        "camera": {
+            "process": {"enabled": True,},
+            "thread": {"resolution": "1080p",}
+        },
+        "serial_handler": {
+            "process": {"enabled": True,}
+        },
+        "semaphore": {
+            "process": {"enabled": False,}
+        },
+        "traffic_com": {
+            "process": {"enabled": False,}
+        }
+    }
+
+class CarSpeed(Enum): # cm/s
+    STOP = 0
+    SLOW = 20
+    NORMAL = 30
+    FAST = 50
+
+class CarModeChanger:
     def __init__(self):
         self.cur_mode = CarMode.STRAIGHT
         self.cur_speed = CarSpeed.NORMAL

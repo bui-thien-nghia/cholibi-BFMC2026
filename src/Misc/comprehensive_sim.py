@@ -14,115 +14,19 @@ import argparse
 import numpy as np
 from PIL import Image
 
-try:
-    import matplotlib.pyplot as plt
-    import matplotlib.patches as mpatches
-    from matplotlib.animation import FuncAnimation
-    from matplotlib.patches import Polygon, Wedge
-    from matplotlib.offsetbox import OffsetImage, AnnotationBbox
-    HAS_MATPLOTLIB = True
-except ImportError:
-    HAS_MATPLOTLIB = False
-    print("[WARNING] matplotlib not available")
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+from matplotlib.animation import FuncAnimation
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+HAS_MATPLOTLIB = True
 
-sys.path.insert(0, os.path.abspath('../Computer/src/servers/trafficCommunicationServer/Useful'))
-sys.path.insert(0, os.path.abspath('../Brain/src/statemachine'))
-sys.path.insert(0, os.path.abspath('../Perception/final'))
+sys.path.insert(0, os.path.abspath('../Brain (copy)/src/statemachine'))
 
-try:
-    import networkx as nx
-except ImportError as e:
-    print(f"[ERROR] networkx required: {e}")
-    sys.exit(1)
+import networkx as nx
 
-try:
-    from modeChanger import StateChanger
-    from systemMode import CarMode
-    HAS_MODE_CHANGER = True
-    print('Using custom StateChanger and CarMode')
-except ImportError:
-    HAS_MODE_CHANGER = False
-    print("[WARNING] modeChanger or systemMode not available, using fallback StateChanger with basic logic")
-    class StateChanger:
-        LANE_KEEPING_NORMAL = {'mode': 'lane_keeping_normal'}
-        LANE_KEEPING_SLOW = {'mode': 'lane_keeping_slow'}
-        LANE_KEEPING_FAST = {'mode': 'lane_keeping_fast'}
-        STOP = {'mode': 'stop'}
-        TURN = {'mode': 'turn'}
-        OVERTAKING = {'mode': 'overtaking'}
-        TAILING = {'mode': 'tailing'}
-        PARKING = {'mode': 'parking'}
-
-        """Fallback StateChanger - provides basic mode transitions based on detections"""
-        def __init__(self):
-            self.cur_state = None
-            self.last_indices = []
-            self.last_boxes = []
-        
-        def record_detection(self, indices, boxes):
-            """Store detection indices and boxes"""
-            self.last_indices = indices if indices else []
-            self.last_boxes = boxes if boxes else []
-        
-        def change_state(self):
-            """Determine new state based on stored detections - HIGH to LOW priority"""
-            # Priority: red_light/stop_sign > pedestrian/cyclist > vehicles > intersection > yellow_light > green_light
-            if not self.last_indices:
-                self.cur_state = None
-                return
-            
-            # HIGHEST PRIORITY: Must stop immediately
-            if any(idx == 5 for idx in self.last_indices):  # red_light
-                self.cur_state = 'STOP'
-                return
-            if any(idx == 16 for idx in self.last_indices):  # stop_sign
-                self.cur_state = 'STOP'
-                return
-            
-            # HIGH PRIORITY: Pedestrians and cyclists
-            if any(idx == 0 for idx in self.last_indices):  # pedestrian
-                self.cur_state = 'STOP'
-                return
-            if any(idx == 1 for idx in self.last_indices):  # cyclist
-                self.cur_state = 'STOP'
-                return
-            
-            # MEDIUM PRIORITY: Other vehicles
-            if any(idx in [2, 3, 4] for idx in self.last_indices):  # car, bus, truck
-                self.cur_state = 'TAILING'
-                return
-            
-            # MEDIUM-LOW: Intersections
-            if any(idx == 9 for idx in self.last_indices):  # intersection
-                self.cur_state = 'TURN'
-                return
-            
-            # LOW PRIORITY: Traffic lights (yellow before green)
-            if any(idx == 6 for idx in self.last_indices):  # yellow_light
-                self.cur_state = 'LANE_KEEPING_SLOW'
-                return
-            if any(idx == 7 for idx in self.last_indices):  # green_light
-                self.cur_state = 'LANE_KEEPING_NORMAL'
-                return
-            
-            # No matching detections
-            self.cur_state = None
-        
-        def _get_state(self):
-            """Return current state as CarMode enum"""
-            if self.cur_state is None:
-                return None
-            mode_map = {
-                'STOP': CarMode.STOP,
-                'LANE_KEEPING_SLOW': CarMode.LANE_KEEPING_SLOW,
-                'LANE_KEEPING_FAST': CarMode.LANE_KEEPING_FAST,
-                'TAILING': CarMode.TAILING,
-                'TURN': CarMode.TURN,
-            }
-            return mode_map.get(self.cur_state, None)
-    print('Using fallback StateChanger with basic logic')
-
-
+from carMode import CarModeChanger
+HAS_MODE_CHANGER = True
+print('Using custom StateChanger and CarMode')
 
 # ============================================================================
 # [FEATURE 1] SCENE OBJECT SYSTEM - Traffic signs, lights, and vehicles
@@ -452,8 +356,8 @@ class ComprehensiveCarSimulator:
         self.position_history = deque(maxlen=1000)
         self.position_history.append((self.x, self.y))
         
-        self.mode_changer = StateChanger()
-        self.current_mode = CarMode.STRAIGHT
+        self.mode_changer = CarModeChanger()
+        self.current_mode = self.mode_changer._get_mode()
         self.current_detections = []
         self.lookup_nodes = []  # For turn recognition visualization
         
@@ -1065,7 +969,7 @@ class InteractiveVisualizer:
     def _load_background_image(self):
         """Load and display background track image."""
         try:
-            img_path = os.path.abspath('comp_track.png')
+            img_path = os.path.abspath('track/comp_track.png')
             if os.path.exists(img_path):
                 img = Image.open(img_path)
                 w, h = img.size
@@ -1517,7 +1421,7 @@ def main():
     else:
         print(f"Movement: Edge-based")
     
-    graph_file = os.path.abspath('Competition_track_graph.graphml')
+    graph_file = os.path.abspath('track/Competition_track_graph.graphml')
     if not os.path.exists(graph_file):
         print(f"[ERROR] Graph file not found: {graph_file}")
         return
