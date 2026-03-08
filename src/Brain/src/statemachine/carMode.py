@@ -262,7 +262,7 @@ class CarModeChanger:
         elif threshold_met('enter_highway_sign'):
             self.cur_speed = CarSpeed.FAST
         else:
-            self.cur_speed = CarSpeed.NORMAL if self._get_speed() != CarSpeed.STOP else CarSpeed.STOP
+            self.cur_speed = CarSpeed.NORMAL
 
         # mode handling: frequency based
         if threshold_met('oneway_sign'):
