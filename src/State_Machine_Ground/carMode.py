@@ -226,13 +226,13 @@ class CarModeChanger:
         def turn_met(self):
             if len(self.lookup_yaw_diffs) == 0:
                 return False
-            return max(self.lookup_yaw_diffs) > 30
+            return max(self.lookup_yaw_diffs) > 45
 
         # speed handling: stop (stop_sign) > stop (others) > slow > normal > fast, priority based
         if self.stop_halt:
-            if self.timer < self.time_checkpoint + 1.0: # set back to 3.0 irl
+            if self.timer < self.time_checkpoint + 3.0: # set back to 3.0 irl
                 self.cur_speed = CarSpeed.STOP
-            elif self.time_checkpoint + 1.0 <= self.timer < self.time_checkpoint + 1.5: # set back to 3.0 irl
+            elif self.time_checkpoint + 3.0 <= self.timer < self.time_checkpoint + 13.0: # set back to 3.0 irl
                 self.cur_speed = CarSpeed.NORMAL
             else:
                 self.stop_halt = False
@@ -271,8 +271,8 @@ class CarModeChanger:
             self.cur_speed = CarSpeed.NORMAL
         elif threshold_met('enter_highway_sign'):
             self.cur_speed = CarSpeed.FAST
-        else:
-            self.cur_speed = CarSpeed.NORMAL if self._get_speed() != CarSpeed.STOP else CarSpeed.STOP
+        elif self._get_speed() != CarSpeed.FAST:
+            self.cur_speed = CarSpeed.NORMAL
 
         # mode handling: frequency based
         if turn_met(self) or threshold_met('roundabout_sign'):
